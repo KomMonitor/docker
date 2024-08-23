@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+    kommonitor:
+        name: kommonitor
+        driver: bridge
+
 services:
     nominatim:
         container_name: nominatim
@@ -34,6 +39,10 @@ services:
         depends_on:
             nominatim:
                 condition: service_healthy
+        volumes:
+            - ../../config/openapi.yaml:/code/api/openapi.yaml
+        networks:
+            - kommonitor
 
 volumes:
     nominatim-data:
