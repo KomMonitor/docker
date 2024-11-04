@@ -5,3 +5,4 @@
 # ... except for this one.
 !.gitignore
 !webClientControlsConfig.json
+!webClientFilterConfig.json
