@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: kommonitor/keycloak:25.0.6-postgres
+    image: kommonitor/keycloak:latest-postgres
     container_name: keycloak
     restart: unless-stopped
     volumes:
