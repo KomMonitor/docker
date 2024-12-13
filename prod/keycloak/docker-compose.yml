@@ -40,6 +40,9 @@ services:
       keycloak-db:
         condition: service_healthy
     environment:
+      # KOMMONITOR_REALMS can be a comma sperated list of multiple realms.
+      # KomMonitor realms will have a dedicated role policy evaluation strategy.
+      - KOMMONITOR_REALMS=kommonitor 
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_DB_URL_HOST=keycloak-db
