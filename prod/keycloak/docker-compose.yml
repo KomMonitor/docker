@@ -30,6 +30,7 @@ services:
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
+      - ./themes:/opt/keycloak/themes
     command:
       - --import-realm
     ports:
