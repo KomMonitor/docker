@@ -7,14 +7,15 @@ networks:
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.5
+    image: quay.io/keycloak/keycloak:25.0.6
     container_name: keycloak
     restart: unless-stopped
     volumes:
-      - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
+      - ./realms/realm-export-kommonitor-token-exchange.json:/opt/keycloak/data/import/realm.json
     command:
       - start-dev
       - --import-realm
+      - --features=token-exchange,admin-fine-grained-authz
     expose:
       - 8080
     ports:
