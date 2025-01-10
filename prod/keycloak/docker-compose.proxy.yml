@@ -18,7 +18,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./database/data:/var/lib/postgresql/data
+      - ./database/data_new:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak-data
       POSTGRES_USER: keycloak
@@ -37,7 +37,6 @@ services:
       - 8080
     ports:
       - 8080:8080
-      - 8443:8443
     networks:
       - kommonitor
     depends_on:
@@ -53,13 +52,8 @@ services:
       - KC_DB_USERNAME=keycloak
       - KC_DB_PASSWORD=keycloak
       - KC_DB_SCHEMA=public
-      - KC_HOSTNAME=keycloak
-      - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/demo/certs/cert.pem
-      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/demo/certs/key.pem
+      - KC_PROXY=edge
+      - KC_HOSTNAME=kommonitor
+      - KC_HOSTNAME_PATH=keycloak
+      - KC_HOSTNAME_ADMIN_URL=https://kommonitor/keycloak/
       - KC_SPI_CONNECTIONS_JPA_LEGACY_MIGRATION_STRATEGY=update
-      # - KC_HOSTNAME_ADMIN=keycloak
-      # - KC_HTTP_ENABLED=true
-      # - KC_HOSTNAME_STRICT=true
-      # - KC_HOSTNAME_STRICT_HTTPS=true
-      # - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/demo/certs/keycloakcert.pem
-      # - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/demo/certs/keycloakkey.pem

@@ -13,7 +13,7 @@ services:
     ports:
       - 443:443
     volumes:
-      - ./templates/default.conf.template:/etc/nginx/templates/default.conf.template
+      - ./templates/keycloak.conf.template:/etc/nginx/templates/default.conf.template
       - ../certs/cert.pem:/etc/ssl/cert.pem
       - ../certs/key.pem:/etc/ssl/key.pem
     environment:
@@ -24,5 +24,6 @@ services:
       - IMPORTER=kommonitor-importer:8087
       - DATA_MANAGEMENT=kommonitor-data-management:8085
       - SPATIAL_DATA_PROCESSOR=kommonitor-spatial-data-processor:8090
+      - KEYCLOAK=keycloak:8080
     networks:
       - kommonitor
