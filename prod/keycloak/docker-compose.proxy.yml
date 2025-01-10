@@ -24,7 +24,7 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: quay.io/keycloak/keycloak:24.0.5
+    image: quay.io/keycloak/keycloak:25.0.6
     container_name: keycloak
     restart: unless-stopped
     volumes:
@@ -33,6 +33,7 @@ services:
     command:
       - start
       - --import-realm
+      - --features=hostname:v1
     expose:
       - 8080
     ports:
