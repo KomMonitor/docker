@@ -7,7 +7,7 @@ networks:
 
 services:
   keycloak:
-    image: quay.io/keycloak/keycloak:25.0.6
+    image: quay.io/keycloak/keycloak:26.0.7
     container_name: keycloak
     restart: unless-stopped
     volumes:
@@ -15,7 +15,6 @@ services:
     command:
       - start-dev
       - --import-realm
-      - --features=hostname:v1
     expose:
       - 8080
     ports:
@@ -23,10 +22,8 @@ services:
     networks:
       - kommonitor
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
       - KC_DB=dev-file
-      - KC_PROXY=edge
-      - KC_HOSTNAME=kommonitor
-      - KC_HOSTNAME_PATH=keycloak
-      - KC_HOSTNAME_ADMIN_URL=http://kommonitor/keycloak/
+      - KC_HOSTNAME=http://kommonitor/keycloak
+      - KC_PROXY_HEADERS=xforwarded
