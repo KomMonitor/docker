@@ -40,6 +40,7 @@
   "bruteForceProtected": false,
   "permanentLockout": false,
   "maxTemporaryLockouts": 0,
+  "bruteForceStrategy": "MULTIPLE",
   "maxFailureWaitSeconds": 900,
   "minimumQuickLoginWaitSeconds": 60,
   "waitIncrementSeconds": 60,
@@ -142,6 +143,7 @@
       }
     ],
     "client": {
+      "kommonitor-data-management": [],
       "realm-management": [
         {
           "id": "5356eaf0-6e0d-480e-9a6d-84c21556060d",
@@ -355,8 +357,10 @@
         }
       ],
       "kommonitor-importer": [],
+      "kommonitor-web-client": [],
       "security-admin-console": [],
       "kommonitor-processing-scheduler": [],
+      "admin-cli": [],
       "account-console": [],
       "broker": [
         {
@@ -370,10 +374,6 @@
         }
       ],
       "kommonitor-processing-engine": [],
-      "kommonitor-client-config": [],
-      "kommonitor-data-management": [],
-      "kommonitor-web-client": [],
-      "admin-cli": [],
       "account": [
         {
           "id": "872dd212-6591-49e9-a595-feeab25c6a69",
@@ -461,7 +461,8 @@
           "containerId": "919fb272-a9a5-4899-9713-b93f6cee60d1",
           "attributes": {}
         }
-      ]
+      ],
+      "kommonitor-client-config": []
     }
   },
   "groups": [],
@@ -642,6 +643,7 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "false",
         "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
@@ -686,6 +688,7 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "false",
         "post.logout.redirect.uris": "+",
         "pkce.code.challenge.method": "S256"
       },
@@ -737,10 +740,12 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "false",
+        "client.use.lightweight.access.token.enabled": "true",
         "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
+      "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
@@ -777,6 +782,7 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "true",
         "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
@@ -835,6 +841,7 @@
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
         "exclude.session.state.from.auth.response": "false",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "saml.artifact.binding": "false",
         "backchannel.logout.session.required": "false",
@@ -940,26 +947,27 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
-        "id.token.as.detached.signature": "false",
-        "saml.assertion.signature": "false",
-        "client.secret.creation.time": "1669622503",
         "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
-        "saml.encrypt": "false",
         "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
-        "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
-        "exclude.session.state.from.auth.response": "false",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
-        "saml.artifact.binding": "false",
         "backchannel.logout.session.required": "false",
         "client_credentials.use_refresh_token": "false",
-        "saml_force_name_id_format": "false",
         "require.pushed.authorization.requests": "false",
         "saml.client.signature": "false",
+        "id.token.as.detached.signature": "false",
+        "saml.assertion.signature": "false",
+        "client.secret.creation.time": "1669622503",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml.artifact.binding": "false",
+        "saml_force_name_id_format": "false",
         "tls.client.certificate.bound.access.tokens": "false",
         "saml.authnstatement": "false",
         "display.on.consent.screen": "false",
@@ -1058,26 +1066,27 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
-        "id.token.as.detached.signature": "false",
-        "saml.assertion.signature": "false",
-        "client.secret.creation.time": "1669622567",
         "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
-        "saml.encrypt": "false",
         "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
-        "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
-        "exclude.session.state.from.auth.response": "false",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
-        "saml.artifact.binding": "false",
         "backchannel.logout.session.required": "false",
         "client_credentials.use_refresh_token": "false",
-        "saml_force_name_id_format": "false",
         "require.pushed.authorization.requests": "false",
         "saml.client.signature": "false",
+        "id.token.as.detached.signature": "false",
+        "saml.assertion.signature": "false",
+        "client.secret.creation.time": "1669622567",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml.artifact.binding": "false",
+        "saml_force_name_id_format": "false",
         "tls.client.certificate.bound.access.tokens": "false",
         "saml.authnstatement": "false",
         "display.on.consent.screen": "false",
@@ -1187,6 +1196,7 @@
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
         "exclude.session.state.from.auth.response": "false",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "saml.artifact.binding": "false",
         "backchannel.logout.session.required": "false",
@@ -1303,6 +1313,7 @@
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
         "exclude.session.state.from.auth.response": "false",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "saml.artifact.binding": "false",
         "backchannel.logout.session.required": "false",
@@ -1417,6 +1428,7 @@
         "backchannel.logout.revoke.offline.tokens": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "use.refresh.tokens": "true",
+        "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
         "exclude.issuer.from.auth.response": "true",
         "backchannel.logout.session.required": "false",
@@ -1441,30 +1453,6 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "be9ca58f-91bc-42da-99f0-420e7de9aa59",
-          "name": "Session State",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-session-state-mapper",
-          "consentRequired": false,
-          "config": {
-            "id.token.claim": "true",
-            "lightweight.claim": "false",
-            "access.token.claim": "true",
-            "introspection.token.claim": "true",
-            "userinfo.token.claim": "true"
-          }
-        },
-        {
-          "id": "a08103cf-4a38-48a1-86b6-a1e6abc6ab72",
-          "name": "Nonce Mapper",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-nonce-backwards-compatible-mapper",
-          "consentRequired": false,
-          "config": {}
-        }
-      ],
       "defaultClientScopes": [
         "web-origins",
         "profile",
@@ -1500,6 +1488,7 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "true",
         "post.logout.redirect.uris": "+"
       },
       "authenticationFlowBindingOverrides": {},
@@ -1545,11 +1534,13 @@
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
+        "realm_client": "false",
+        "client.use.lightweight.access.token.enabled": "true",
         "post.logout.redirect.uris": "+",
         "pkce.code.challenge.method": "S256"
       },
       "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": false,
+      "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": 0,
       "protocolMappers": [
         {
@@ -2062,44 +2053,6 @@
       ]
     },
     {
-      "id": "b61c2918-def1-42a4-ad1d-56e59286f156",
-      "name": "basic",
-      "description": "OpenID Connect scope for add all basic claims to the token",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "false",
-        "display.on.consent.screen": "false"
-      },
-      "protocolMappers": [
-        {
-          "id": "5aae4027-8ca6-4889-991f-d11b57a1b1b9",
-          "name": "sub",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-sub-mapper",
-          "consentRequired": false,
-          "config": {
-            "introspection.token.claim": "true",
-            "access.token.claim": "true"
-          }
-        },
-        {
-          "id": "f3f2bb1d-0a7e-46da-8b5e-12725281f880",
-          "name": "auth_time",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "AUTH_TIME",
-            "id.token.claim": "true",
-            "introspection.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "auth_time",
-            "jsonType.label": "long"
-          }
-        }
-      ]
-    },
-    {
       "id": "78ff7d74-f76f-4e99-ab90-392120e228e9",
       "name": "address",
       "description": "OpenID Connect built-in scope: address",
@@ -2126,6 +2079,45 @@
             "user.attribute.region": "region",
             "access.token.claim": "true",
             "user.attribute.locality": "locality"
+          }
+        }
+      ]
+    },
+    {
+      "id": "3b9457c5-5a65-4211-a360-b786b5d386b1",
+      "name": "basic",
+      "description": "OpenID Connect scope for add all basic claims to the token",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "id": "fcae8a69-86b9-4665-9431-12456e8a7095",
+          "name": "auth_time",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "AUTH_TIME",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "auth_time",
+            "jsonType.label": "long"
+          }
+        },
+        {
+          "id": "6dbd5cf0-5363-449c-936c-43aa3ff9c6a1",
+          "name": "sub",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "access.token.claim": "true"
           }
         }
       ]
@@ -2158,7 +2150,7 @@
   },
   "smtpServer": {},
   "loginTheme": "kommonitor",
-  "accountTheme": "keycloak.v2",
+  "accountTheme": "keycloak.v3",
   "adminTheme": "keycloak.v2",
   "emailTheme": "keycloak",
   "eventsEnabled": false,
@@ -2261,13 +2253,13 @@
         "config": {
           "allowed-protocol-mapper-types": [
             "saml-user-attribute-mapper",
-            "saml-role-list-mapper",
-            "oidc-address-mapper",
-            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
             "saml-user-property-mapper",
-            "oidc-usermodel-attribute-mapper"
+            "oidc-address-mapper",
+            "oidc-full-name-mapper"
           ]
         }
       },
@@ -2291,14 +2283,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
+            "saml-user-property-mapper",
             "saml-user-attribute-mapper",
             "saml-role-list-mapper",
-            "saml-user-property-mapper",
-            "oidc-address-mapper",
             "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-full-name-mapper",
+            "oidc-address-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper"
           ]
         }
       },
@@ -3052,19 +3044,20 @@
   "firstBrokerLoginFlow": "first broker login",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
-    "cibaExpiresIn": "120",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DeviceCodeLifespan": "600",
     "clientOfflineSessionMaxLifespan": "0",
     "oauth2DevicePollingInterval": "5",
     "clientSessionIdleTimeout": "0",
-    "parRequestUriLifespan": "60",
-    "clientSessionMaxLifespan": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
-    "realmReusableOtpCode": "false"
+    "realmReusableOtpCode": "false",
+    "cibaExpiresIn": "120",
+    "oauth2DeviceCodeLifespan": "600",
+    "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
+    "organizationsEnabled": "false"
   },
-  "keycloakVersion": "25.0.5",
+  "keycloakVersion": "26.0.7",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "clientProfiles": {
