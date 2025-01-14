@@ -2202,7 +2202,7 @@
   },
   "smtpServer": {},
   "loginTheme": "kommonitor",
-  "accountTheme": "keycloak.v2",
+  "accountTheme": "keycloak.v3",
   "adminTheme": "keycloak.v2",
   "emailTheme": "keycloak",
   "eventsEnabled": false,
