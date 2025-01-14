@@ -124,6 +124,9 @@ services:
       - kommonitor
     links:
       - kommonitor-db
+    # Only use this for dev setup
+    # extra_hosts:
+    #  - "kommonitor:192.168.178.20"
     environment:
       - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_DATA_MANAGEMENT_BASEPATH}/v3/api-docs/swagger-config
       - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_DATA_MANAGEMENT_BASEPATH}/v3/api-docs

@@ -70,6 +70,16 @@ which forwards certain subpath requests to the correct port under which the KomM
 The [./prod](./prod) directory aims to provide configuration files that are easy to adopt for a production deployment.
 Although most configurations are ready-to-use, some manual actions are still required.
 
+## Proxied Keycloak
+We also provide some templates to use Keycloak with a proxy. Some configuration parameters slightly differ from 
+running Keycloak without a proxy, so we have created some extra compose and env files inside the 
+[./dev-proxy](./dev-proxy) and [./prod](./prod) directories, which must be referenced in the startup commands. 
+- Keycloak: `docker compose -f .\docker-compose.proxy.yml up`
+- KomMonitor: `docker compose --env-file .\.env.keycloak-proxy up`
+- NGINX: `docker compose -f .\docker-compose.keycloak.yml up`
+
+To read more about running Keycloak with a reverse proxy, have a look at the [official Keycloak documentation](https://www.keycloak.org/server/reverseproxy)
+
 ### SSL/TLS
 Keycloak and KomMonitor have to be configured to support SSL/TLS in order to expose service endpoints via HTTPS. While 
 Keycloak will be configured to use SSL/TLS by its own, the NGINX proxy provides SSL/TLS termination for all KomMonitor
