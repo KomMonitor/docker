@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:4.0.0-beta.1'
+    image: 'kommonitor/web-client:4.0.0-beta.2'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
