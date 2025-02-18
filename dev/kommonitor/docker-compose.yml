@@ -8,13 +8,16 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:3.2.0'
+    image: 'kommonitor/web-client:3.3.0-beta.3'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
       - ../../config/templates/config-storage-server.json.template:/code/templates/config-storage-server.json.template
       - ../../config/config.sh:/code/config.sh
       - ./storage/client/config-storage-server.json:/usr/share/nginx/html/config/config-storage-server.json
+      # Provide own styles and fonts
+      # - ./styles/kommonitor-custom.css:/usr/share/nginx/html/kommonitor-custom.css
+      # - ./fonts/kommonitor-custom.ttf:/usr/share/nginx/html/fonts/kommonitor-custom.ttf
     environment:
       - KOMMONITOR_NAME=kommonitor-web-client
     env_file:
