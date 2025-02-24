@@ -30,8 +30,10 @@ services:
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
+#    entrypoint: /opt/keycloak/bin/kc.sh start
     command:
       - --import-realm
+#      - --features=admin-fine-grained-authz,scripts,token-exchange
     ports:
       - 8443:8443
     networks:
@@ -45,6 +47,7 @@ services:
       - KOMMONITOR_REALMS=kommonitor 
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+#      - KC_DB=postgres
       - KC_DB_URL_HOST=keycloak-db
       - KC_DB_URL_PORT=5432
       - KC_DB_URL_DATABASE=keycloak-data
