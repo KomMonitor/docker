@@ -1,5 +1,6 @@
 {
     "targetUrlToConfigStorageServer_appConfig" : "${APP_CONFIG_URL}",
     "targetUrlToConfigStorageServer_keycloakConfig" : "${KEYCLOAK_CONFIG_URL}",
-    "targetUrlToConfigStorageServer_controlsConfig" : "${CONTROLS_CONFIG_URL}"
+    "targetUrlToConfigStorageServer_controlsConfig" : "${CONTROLS_CONFIG_URL}",
+    "targetUrlToConfigStorageServer_filterConfig" : "${FILTER_CONFIG_URL}",
 }
