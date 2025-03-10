@@ -153,7 +153,7 @@ services:
       - ../../config/keycloak.env
 
   kommonitor-spatial-data-processor:
-    image: kommonitor/spatial-data-processor:1.0.4
+    image: kommonitor/spatial-data-processor:1.1.0
     container_name: kommonitor-spatial-data-processor
     restart: unless-stopped
     networks:
