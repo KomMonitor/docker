@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:3.3.0-beta.4'
+    image: 'kommonitor/web-client:3.3.0-beta.5'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -123,7 +123,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:4.1.2
+    image: kommonitor/data-management:4.1.3
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
@@ -146,7 +146,7 @@ services:
       - ../../config/keycloak.env
 
   kommonitor-spatial-data-processor:
-    image: kommonitor/spatial-data-processor:1.0.4
+    image: kommonitor/spatial-data-processor:1.1.0
     container_name: kommonitor-spatial-data-processor
     restart: unless-stopped
     networks:
