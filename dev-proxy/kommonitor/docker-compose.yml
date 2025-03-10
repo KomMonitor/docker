@@ -65,7 +65,7 @@ services:
       - ../../config/processing-engine.env
 
   kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.0.2'
+    image: 'kommonitor/processing-scheduler:2.1.0'
     container_name: kommonitor-processing-scheduler
     restart: unless-stopped
     networks:
