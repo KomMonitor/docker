@@ -8,7 +8,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:3.1.5'
+    image: 'kommonitor/web-client:4.0.0-beta.3'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -51,7 +51,7 @@ services:
       - kommonitor
 
   kommonitor-processing-engine:
-    image: 'kommonitor/processing-engine:2.0.2'
+    image: 'kommonitor/processing-engine:3.0.0'
     container_name: kommonitor-processing-engine
     restart: unless-stopped
     ports:
@@ -66,7 +66,7 @@ services:
       - ../../config/processing-engine.env
 
   kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.0.2'
+    image: 'kommonitor/processing-scheduler:2.1.0'
     container_name: kommonitor-processing-scheduler
     restart: unless-stopped
     networks:
@@ -78,7 +78,7 @@ services:
       - ../../config/processing-scheduler.env
 
   kommonitor-importer:
-    image: 'kommonitor/importer:3.2.4'
+    image: kommonitor/importer:4.0.0-beta.1
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
@@ -100,7 +100,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./storage/database/data:/var/lib/postgresql/data
+      - ./storage/database/data_v5:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"]
       interval: 10s
@@ -110,7 +110,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:4.0.1
+    image: kommonitor/data-management:5.0.0-beta.7
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
@@ -122,12 +122,17 @@ services:
       - kommonitor
     links:
       - kommonitor-db
+    environment:
+      - KOMMONITOR_MIGRATION_ENABLED=false
+      - KOMMONITOR_MIGRATION_VERSIONS=5.0.0
+      - KOMMONITOR_MIGRATION_DELETE_LEGACY_ADMIN_ORGANIZATIONALUNIT=true
+      - KOMMONITOR_MIGRATION_DELETE_LEGACY_PUBLIC_ORGANIZATIONALUNIT=true
     env_file:
       - ../../config/data-management.env
       - ../../config/keycloak.env
 
   kommonitor-spatial-data-processor:
-    image: kommonitor/spatial-data-processor:1.0.4
+    image: kommonitor/spatial-data-processor:1.1.0
     container_name: kommonitor-spatial-data-processor
     restart: unless-stopped
     networks:
