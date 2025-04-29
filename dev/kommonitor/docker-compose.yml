@@ -152,8 +152,7 @@ services:
   #   environment:
   #     - PGADMIN_DEFAULT_EMAIL=user@kommonitor.de
   #     - PGADMIN_DEFAULT_PASSWORD=kommonitor
-    # volumes:
-    #   - /var/kommonitor/pgadmin/servers.json:/pgadmin4/servers.json
-    #   - /var/kommonitor/pgadmin/pgadmin:/var/lib/pgadmin
-    # networks:
-    #   - kommonitor
+  #   volumes:
+  #     - ./storage/pgadmin:/var/lib/pgadmin
+  #   networks:
+  #     - kommonitor
