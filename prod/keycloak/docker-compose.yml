@@ -24,19 +24,17 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1.0
+    image: kommonitor/keycloak:26.1.0-postgres
     container_name: keycloak
     restart: unless-stopped
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
+#    entrypoint: /opt/keycloak/bin/kc.sh start
     command:
-      - start
       - --import-realm
-    expose:
-      - 8080
+#      - --features=admin-fine-grained-authz,scripts,token-exchange
     ports:
-      - 8080:8080
       - 8443:8443
     networks:
       - kommonitor
@@ -44,9 +42,12 @@ services:
       keycloak-db:
         condition: service_healthy
     environment:
+      # KOMMONITOR_REALMS can be a comma sperated list of multiple realms.
+      # KomMonitor realms will have a dedicated role policy evaluation strategy.
+      - KOMMONITOR_REALMS=kommonitor 
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_DB=postgres
+#      - KC_DB=postgres
       - KC_DB_URL_HOST=keycloak-db
       - KC_DB_URL_PORT=5432
       - KC_DB_URL_DATABASE=keycloak-data
@@ -54,6 +55,6 @@ services:
       - KC_DB_PASSWORD=keycloak
       - KC_DB_SCHEMA=public
       - KC_HOSTNAME=keycloak
+      - KC_SPI_CONNECTIONS_JPA_LEGACY_MIGRATION_STRATEGY=update
       - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/demo/certs/cert.pem
       - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/demo/certs/key.pem
-      - KC_SPI_CONNECTIONS_JPA_LEGACY_MIGRATION_STRATEGY=update

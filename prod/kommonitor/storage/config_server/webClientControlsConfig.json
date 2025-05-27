@@ -1,80 +1,80 @@
 [
     {
         "id": "indicatorConfig",
-        "roles": []
+        "groups": []
     },
     {
         "id": "poi",
-        "roles": []
+        "groups": []
     },
     {
         "id": "dataImport",
-        "roles": []
+        "groups": []
     },
     {
         "id": "filter",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "measureOfValueClassification",
-        "roles": []
+        "groups": []
     },
     {
         "id": "balance",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "diagrams",
-        "roles": []
+        "groups": []
     },
     {
         "id": "radarDiagram",
         "roles": [
-            "fakeAdvancedModeRole"
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "regressionDiagram",
         "roles": [
-            "fakeAdvancedModeRole"
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "reachability",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "processing",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "reportingButton",
-        "roles": []
+        "groups": []
     },
     {
         "id": "indicatorLegendExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "diagramExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     },
     {
         "id": "georesourceExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
+        "groups": [
+            "fakeAdvancedModeGroup"
         ]
     }
 ]

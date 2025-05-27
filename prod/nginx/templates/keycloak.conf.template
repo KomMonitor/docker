@@ -61,7 +61,8 @@ server {
         proxy_pass http://client/;
     }
 
-    location /keycloak/ {
+    location /keycloak/ {        
+        rewrite ^/keycloak/([^.?]*[^/])/console$ /keycloak/$1/console/ redirect;
         proxy_pass http://keycloak/;
     }
 

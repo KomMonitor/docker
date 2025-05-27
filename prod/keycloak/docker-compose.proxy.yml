@@ -18,20 +18,19 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - ./database/data_new:/var/lib/postgresql/data
+      - ./database/data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak-data
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1.0
+    image: kommonitor/keycloak:26.1.0-postgres
     container_name: keycloak
     restart: unless-stopped
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
     command:
-      - start
       - --import-realm
     expose:
       - 8080
@@ -43,9 +42,9 @@ services:
       keycloak-db:
         condition: service_healthy
     environment:
+      - KOMMONITOR_REALMS=kommonitor 
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-      - KC_DB=postgres
       - KC_DB_URL_HOST=keycloak-db
       - KC_DB_URL_PORT=5432
       - KC_DB_URL_DATABASE=keycloak-data
