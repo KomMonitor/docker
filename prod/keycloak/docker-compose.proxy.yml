@@ -30,31 +30,28 @@ services:
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
-#    entrypoint: /opt/keycloak/bin/kc.sh start
     command:
       - --import-realm
-#      - --features=admin-fine-grained-authz,scripts,token-exchange
+    expose:
+      - 8080
     ports:
-      - 8443:8443
+      - 8080:8080
     networks:
       - kommonitor
     depends_on:
       keycloak-db:
         condition: service_healthy
     environment:
-      # KOMMONITOR_REALMS can be a comma sperated list of multiple realms.
-      # KomMonitor realms will have a dedicated role policy evaluation strategy.
       - KOMMONITOR_REALMS=kommonitor 
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-#      - KC_DB=postgres
       - KC_DB_URL_HOST=keycloak-db
       - KC_DB_URL_PORT=5432
       - KC_DB_URL_DATABASE=keycloak-data
       - KC_DB_USERNAME=keycloak
       - KC_DB_PASSWORD=keycloak
       - KC_DB_SCHEMA=public
-      - KC_HOSTNAME=keycloak
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME=https://kommonitor/keycloak
+      - KC_PROXY_HEADERS=xforwarded
       - KC_SPI_CONNECTIONS_JPA_LEGACY_MIGRATION_STRATEGY=update
-      - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/demo/certs/cert.pem
-      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/demo/certs/key.pem

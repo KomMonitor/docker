@@ -1,0 +1,69 @@
+upstream client {
+    server ${CLIENT};
+}
+upstream client-config {
+    server ${CLIENT_CONFIG};
+}
+upstream processing-engine {
+    server ${PROCESSING_ENGINE};
+}
+upstream importer {
+    server ${IMPORTER};
+}
+upstream data-management {
+    server ${DATA_MANAGEMENT};
+}
+upstream spatial-data-processor {
+    server ${SPATIAL_DATA_PROCESSOR};
+}
+upstream keycloak {
+    server ${KEYCLOAK};
+}
+
+server {
+    listen            ${NGINX_PORT} ssl;
+    listen       [::]:${NGINX_PORT} ssl;
+    ssl_certificate /etc/ssl/cert.pem;
+    ssl_certificate_key /etc/ssl/key.pem;
+
+    client_max_body_size 1G;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Nginx-Proxy true;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    proxy_buffer_size   128k;
+    proxy_buffers   4 256k;
+    proxy_busy_buffers_size   256k;
+
+    location /kommonitor/api {
+        location /kommonitor/api/importer/ {
+            proxy_pass http://importer/;
+        }
+        location /kommonitor/api/client-config/ {
+            proxy_pass http://client-config/;
+        }
+        location /kommonitor/api/processingengine/ {
+            proxy_pass http://processing-engine/;
+        }
+        location /kommonitor/api/datamanagement/ {
+            proxy_pass http://data-management/;
+        }
+        location /kommonitor/api/processor/ {
+            proxy_pass http://spatial-data-processor/;
+        }
+    }
+
+    location /kommonitor/ {
+        proxy_pass http://client/;
+    }
+
+    location /keycloak/ {        
+        rewrite ^/keycloak/([^.?]*[^/])/console$ /keycloak/$1/console/ redirect;
+        proxy_pass http://keycloak/;
+    }
+
+}
