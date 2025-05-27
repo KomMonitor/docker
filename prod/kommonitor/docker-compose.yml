@@ -7,21 +7,25 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:2.1.14'
+    image: 'kommonitor/web-client:3.3.0'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
-      - ./client/config-storage-server.json:/usr/share/nginx/html/config/config-storage-server.json # mount config for client-config-service
-      - ./client_config/webClientAppConfig.js:/usr/share/nginx/html/config/env_backup.js
-      - ./client_config/webClientKeycloakConfig.json:/usr/share/nginx/html/config/keycloak_backup.json
-      - ./client_config/webClientControlsConfig.json:/usr/share/nginx/html/config/controls-config_backup.json
+      - ../../config/templates/config-storage-server.json.template:/code/templates/config-storage-server.json.template
+      - ../../config/config.sh:/code/config.sh
+      - ./storage/client/config-storage-server.json:/usr/share/nginx/html/config/config-storage-server.json
+    environment:
+      - KOMMONITOR_NAME=kommonitor-web-client
+    env_file:
+      - ../../config/client.env
     ports:
       - 8084:80
     networks:
       - kommonitor
-
+    command: ["/bin/sh", "/code/config.sh"]
+  
   kommonitor-client-config:
-    image: 'kommonitor/client-config:2.0.3'
+    image: 'kommonitor/client-config:2.1.0'
     container_name: kommonitor-client-config
     restart: unless-stopped
     ports:
@@ -29,12 +33,16 @@ services:
     networks:
       - kommonitor
     volumes:
-      - ./client_config/webClientAppConfig.js:/code/configStorage/webClientAppConfig.js # mounting existing webClientAppConfig into container to have console access
-      - ./client_config/webClientKeycloakConfig.json:/code/configStorage/webClientKeycloakConfig.json # mounting existing webClientKeycloakConfig into container to have console access
-      - ./client_config/webClientControlsConfig.json:/code/configStorage/webClientControlsConfig.json # mounting existing webClientControlsConfig into container to have console access
-      - ../certs/cert.pem:/etc/ssl/cert.pem
+      - ../../config/templates:/code/templates
+      - ../../config/config.sh:/code/config.sh
+      - ./storage/config_server:/code/configStorage
+      - ../certs/cert.pem:/etc/ssl/certs/kommonitor-cert.pem
+    environment:
+      - KOMMONITOR_NAME=kommonitor-client-config
+      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
     env_file:
-      - ./config/client-config.env
+      - ../../config/client-config.env
+    command: ["/bin/sh", "/code/config.sh"]
 
   redis:
     image: redis:alpine
@@ -52,29 +60,33 @@ services:
     networks:
       - kommonitor
     volumes:
-      - ./processing_engine:/code/tmp
-      - ../certs/cert.pem:/etc/ssl/cert.pem
+      - ./storage/processing_engine:/code/tmp
+      - ../certs/cert.pem:/etc/ssl/certs/kommonitor-cert.pem
     depends_on:
       - redis
     env_file:
-      - ./config/processing-engine.env
+      - ../../config/processing-engine.env
+    environment:
+      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
 
   kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.0.2'
+    image: 'kommonitor/processing-scheduler:2.1.0'
     container_name: kommonitor-processing-scheduler
     restart: unless-stopped
     networks:
       - kommonitor
     volumes:
-      - ../certs/cert.pem:/etc/ssl/cert.pem
+      - ../certs/cert.pem:/etc/ssl/certs/kommonitor-cert.pem
     depends_on:
       - kommonitor-processing-engine
       - kommonitor-data-management
     env_file:
-      - ./config/processing-scheduler.env
+      - ../../config/processing-scheduler.env
+    environment:
+      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
 
   kommonitor-importer:
-    image: 'kommonitor/importer:2.0.7'
+    image: 'kommonitor/importer:3.2.5'
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
@@ -82,14 +94,18 @@ services:
     ports:
       - 8087:8087
     volumes:
-      - ./importer:/tmp/importer
-      - ../certs/keystore.jks:/etc/ssl/keystore.jks
+      - ./storage/importer:/tmp/kommonitor
+      - ../certs/cert.pem:/certificates/ca_cert.pem
+    environment:
+      - USE_SYSTEM_CA_CERTS=1
+      - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_IMPORTER_BASEPATH}/v3/api-docs/swagger-config
+      - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_IMPORTER_BASEPATH}/v3/api-docs
     env_file:
-      - ./config/importer.env
-      - ./config/keycloak.env
+      - ../../config/importer.env
+      - ../../config/keycloak.env
 
   kommonitor-db:
-    image: postgis/postgis:latest
+    image: postgis/postgis:15-master
     container_name: kommonitor-db
     restart: unless-stopped
     networks:
@@ -97,16 +113,22 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./database/data:/var/lib/postgresql/data
+      - ./storage/database/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     env_file:
-      - ./config/db.env
+      - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:2.1.8
+    image: kommonitor/data-management:4.1.5
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
-      - kommonitor-db
+      kommonitor-db:
+        condition: service_healthy
     ports:
       - "8085:8085"
     networks:
@@ -114,23 +136,45 @@ services:
     links:
       - kommonitor-db
     volumes:
-      - ../certs/keystore.jks:/etc/ssl/keystore.jks
+      - ../certs/cert.pem:/certificates/ca_cert.pem
+    environment:
+      - USE_SYSTEM_CA_CERTS=1
+      - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_DATA_MANAGEMENT_BASEPATH}/v3/api-docs/swagger-config
+      - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_DATA_MANAGEMENT_BASEPATH}/v3/api-docs
     env_file:
-      - ./config/data-management.env
-      - ./config/keycloak.env
+      - ../../config/data-management.env
+      - ../../config/keycloak.env
+
+  kommonitor-spatial-data-processor:
+    image: kommonitor/spatial-data-processor:1.1.0
+    container_name: kommonitor-spatial-data-processor
+    restart: unless-stopped
+    networks:
+      - kommonitor
+    ports:
+      - 8090:8090
+    volumes:
+      - ../../data/basis-dlm:/opt/kommonitor/data/basis-dlm
+      - ../certs/cert.pem:/certificates/ca_cert.pem
+    environment:
+      - USE_SYSTEM_CA_CERTS=1
+      - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_SPATIAL_DATA_PROCESSOR_BASEPATH}/v3/api-docs/swagger-config
+      - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_SPATIAL_DATA_PROCESSOR_BASEPATH}/v3/api-docs
+    env_file:
+      - ../../config/spatial-data-processor.env
 
   # optional pgadmin container to inspect the database
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    restart: unless-stopped
-    ports:
-      - 8083:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@kommonitor.de
-      - PGADMIN_DEFAULT_PASSWORD=kommonitor
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8083:80
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=user@kommonitor.de
+  #     - PGADMIN_DEFAULT_PASSWORD=kommonitor
     # volumes:
     #   - /var/kommonitor/pgadmin/servers.json:/pgadmin4/servers.json
     #   - /var/kommonitor/pgadmin/pgadmin:/var/lib/pgadmin
-    networks:
-      - kommonitor
+    # networks:
+    #   - kommonitor
