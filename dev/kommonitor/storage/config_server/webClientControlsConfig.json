@@ -1,80 +1,93 @@
 [
     {
         "id": "indicatorConfig",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "poi",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "dataImport",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "filter",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "measureOfValueClassification",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "balance",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "diagrams",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "radarDiagram",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "regressionDiagram",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "reachability",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "processing",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "reportingButton",
-        "roles": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "indicatorLegendExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "diagramExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     },
     {
         "id": "georesourceExportButtons",
-        "roles": [
-            "fakeAdvancedModeRole"
-        ]
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
     }
 ]
