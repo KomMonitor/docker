@@ -1,80 +1,93 @@
 [
     {
         "id": "indicatorConfig",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "poi",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "dataImport",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "filter",
-        "groups": [
-            "fakeAdvancedModeGroup"
-        ]
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "measureOfValueClassification",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "balance",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "diagrams",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "radarDiagram",
-        "roles": [
+        "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "regressionDiagram",
-        "roles": [
+        "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "reachability",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "processing",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "reportingButton",
-        "groups": []
+        "groups": [],
+        "restricted": false
     },
     {
         "id": "indicatorLegendExportButtons",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "diagramExportButtons",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     },
     {
         "id": "georesourceExportButtons",
         "groups": [
             "fakeAdvancedModeGroup"
-        ]
+        ],
+        "restricted": false
     }
 ]
