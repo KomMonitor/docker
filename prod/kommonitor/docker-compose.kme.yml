@@ -1,0 +1,36 @@
+version: '3.8'
+
+networks:
+  kommonitor:
+    name: kommonitor
+    driver: bridge
+
+services:
+  kommonitor-client-kme:
+    image: 'kommonitor/web-client:4.1.1'
+    container_name: kommonitor-client-kme
+    restart: unless-stopped
+    volumes:
+      - ./storage/client/config-storage-server-kme.json:/usr/share/nginx/html/config/config-storage-server.json
+    environment:
+      - KOMMONITOR_NAME=kommonitor-web-client
+      - KOMMONITOR_CONFIG_SERVER_API_URL=https://kme.localhost/kommonitor/api/client-config
+    env_file:
+      - ../../config/client.env
+    networks:
+      - kommonitor
+  
+  kommonitor-client-config-kme:
+    image: 'kommonitor/client-config:2.1.0'
+    container_name: kommonitor-client-config-kme
+    restart: unless-stopped
+    networks:
+      - kommonitor
+    volumes:
+      - ./storage/config_server_kme:/code/configStorage
+      - ../certs/cert.pem:/etc/ssl/certs/kommonitor-cert.pem
+    environment:
+      - KOMMONITOR_NAME=kommonitor-client-config
+      - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
+    env_file:
+      - ../../config/client-config.env

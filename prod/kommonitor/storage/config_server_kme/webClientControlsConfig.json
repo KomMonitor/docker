@@ -1,0 +1,93 @@
+[
+    {
+        "id": "indicatorConfig",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "poi",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "dataImport",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "filter",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "measureOfValueClassification",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "balance",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "diagrams",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "radarDiagram",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "regressionDiagram",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "reachability",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "processing",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "reportingButton",
+        "groups": [],
+        "restricted": false
+    },
+    {
+        "id": "indicatorLegendExportButtons",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "diagramExportButtons",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    },
+    {
+        "id": "georesourceExportButtons",
+        "groups": [
+            "fakeAdvancedModeGroup"
+        ],
+        "restricted": false
+    }
+]
