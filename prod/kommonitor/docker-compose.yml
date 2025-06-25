@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:3.3.0'
+    image: 'kommonitor/web-client:3.4.0-beta.2'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -173,8 +173,7 @@ services:
   #   environment:
   #     - PGADMIN_DEFAULT_EMAIL=user@kommonitor.de
   #     - PGADMIN_DEFAULT_PASSWORD=kommonitor
-    # volumes:
-    #   - /var/kommonitor/pgadmin/servers.json:/pgadmin4/servers.json
-    #   - /var/kommonitor/pgadmin/pgadmin:/var/lib/pgadmin
-    # networks:
-    #   - kommonitor
+  #   volumes:
+  #     - ./storage/pgadmin:/var/lib/pgadmin
+  #   networks:
+  #     - kommonitor
