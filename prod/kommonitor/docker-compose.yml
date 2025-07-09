@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:3.4.0-beta.2'
+    image: 'kommonitor/web-client:3.4.0'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -123,7 +123,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:4.1.5
+    image: kommonitor/data-management:4.1.6
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
@@ -135,8 +135,9 @@ services:
       - kommonitor
     links:
       - kommonitor-db
+    #  Note: CA Certificates have to be provided with .crt extension
     volumes:
-      - ../certs/cert.pem:/certificates/ca_cert.pem
+      - ../certs/cert.crt:/certificates/ca_cert.crt
     environment:
       - USE_SYSTEM_CA_CERTS=1
       - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_DATA_MANAGEMENT_BASEPATH}/v3/api-docs/swagger-config
