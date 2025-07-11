@@ -7,7 +7,7 @@ networks:
 
 services:
   keycloak:
-    image: kommonitor/keycloak:26.1.3-postgres
+    image: kommonitor/keycloak:26.2.5-postgres
     entrypoint: /opt/keycloak/bin/kc.sh start-dev
     container_name: keycloak
     restart: unless-stopped
@@ -15,7 +15,7 @@ services:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
     command:
       - --import-realm
-      - --features=admin-fine-grained-authz,scripts,token-exchange
+      - --features=admin-fine-grained-authz:v1,scripts,token-exchange:v1
     expose:
       - 8080
     ports:
