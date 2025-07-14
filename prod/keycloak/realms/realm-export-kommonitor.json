@@ -528,8 +528,8 @@
       "id": "e8f91a25-c48c-418a-ad4b-ac4e43aa7019",
       "username": "service-account-admin-cli",
       "emailVerified": false,
-      "createdTimestamp": 1731501209709,
       "enabled": true,
+      "createdTimestamp": 1731501209709,
       "totp": false,
       "serviceAccountClientId": "admin-cli",
       "disableableCredentialTypes": [],
@@ -547,8 +547,8 @@
       "id": "9291a212-9756-4b0b-b8c2-c2106eb97a62",
       "username": "service-account-kommonitor-client-config",
       "emailVerified": false,
-      "createdTimestamp": 1659953857815,
       "enabled": true,
+      "createdTimestamp": 1659953857815,
       "totp": false,
       "serviceAccountClientId": "kommonitor-client-config",
       "disableableCredentialTypes": [],
@@ -563,8 +563,8 @@
       "id": "8d455124-d42b-4f6f-9322-191af15b8de8",
       "username": "service-account-kommonitor-data-management",
       "emailVerified": false,
-      "createdTimestamp": 1659953857847,
       "enabled": true,
+      "createdTimestamp": 1659953857847,
       "totp": false,
       "serviceAccountClientId": "kommonitor-data-management",
       "disableableCredentialTypes": [],
@@ -579,8 +579,8 @@
       "id": "cb5db9cc-b6ec-4def-bee5-e89efe47e816",
       "username": "service-account-kommonitor-importer",
       "emailVerified": false,
-      "createdTimestamp": 1659953857884,
       "enabled": true,
+      "createdTimestamp": 1659953857884,
       "totp": false,
       "serviceAccountClientId": "kommonitor-importer",
       "disableableCredentialTypes": [],
@@ -595,8 +595,8 @@
       "id": "693d1323-ed2f-43b5-a16d-1eb0854bff9c",
       "username": "service-account-kommonitor-processing-engine",
       "emailVerified": false,
-      "createdTimestamp": 1659953857898,
       "enabled": true,
+      "createdTimestamp": 1659953857898,
       "totp": false,
       "serviceAccountClientId": "kommonitor-processing-engine",
       "disableableCredentialTypes": [],
@@ -611,8 +611,8 @@
       "id": "80cabb42-3749-43f5-821c-9434adc9fb98",
       "username": "service-account-kommonitor-processing-scheduler",
       "emailVerified": false,
-      "createdTimestamp": 1659953857923,
       "enabled": true,
+      "createdTimestamp": 1659953857923,
       "totp": false,
       "serviceAccountClientId": "kommonitor-processing-scheduler",
       "disableableCredentialTypes": [],
@@ -627,8 +627,8 @@
       "id": "ec0b7a37-bfe5-4e98-a208-0c8881329826",
       "username": "service-account-realm-management",
       "emailVerified": false,
-      "createdTimestamp": 1731573891395,
       "enabled": true,
+      "createdTimestamp": 1731573891395,
       "totp": false,
       "serviceAccountClientId": "realm-management",
       "disableableCredentialTypes": [],
@@ -2578,12 +2578,12 @@
         "config": {
           "allowed-protocol-mapper-types": [
             "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
-            "oidc-address-mapper",
-            "saml-user-property-mapper",
             "oidc-full-name-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-address-mapper",
+            "saml-role-list-mapper",
+            "saml-user-property-mapper",
             "saml-user-attribute-mapper"
           ]
         }
@@ -2609,13 +2609,13 @@
         "config": {
           "allowed-protocol-mapper-types": [
             "oidc-usermodel-attribute-mapper",
-            "saml-role-list-mapper",
-            "oidc-full-name-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-address-mapper",
             "saml-user-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-property-mapper",
+            "oidc-full-name-mapper",
+            "saml-role-list-mapper",
+            "oidc-address-mapper",
+            "oidc-usermodel-property-mapper"
           ]
         }
       },
@@ -3351,6 +3351,15 @@
       "config": {}
     },
     {
+      "alias": "idp_link",
+      "name": "Linking Identity Provider",
+      "providerId": "idp_link",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 110,
+      "config": {}
+    },
+    {
       "alias": "update_user_locale",
       "name": "Update User Locale",
       "providerId": "update_user_locale",
@@ -3382,7 +3391,7 @@
     "clientSessionMaxLifespan": "0",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.2.5",
+  "keycloakVersion": "26.3.1",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
