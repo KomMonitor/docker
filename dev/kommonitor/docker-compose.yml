@@ -8,7 +8,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:4.2.0'
+    image: 'kommonitor/web-client:4.2.1'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -69,7 +69,7 @@ services:
       - ../../config/processing-engine.env
 
   kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.1.0'
+    image: 'kommonitor/processing-scheduler:2.1.1'
     container_name: kommonitor-processing-scheduler
     restart: unless-stopped
     networks:
@@ -81,7 +81,7 @@ services:
       - ../../config/processing-scheduler.env
 
   kommonitor-importer:
-    image: kommonitor/importer:4.1.0
+    image: kommonitor/importer:4.1.1
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
@@ -90,6 +90,8 @@ services:
       - 8087:8087
     volumes:
       - ./storage/importer:/tmp/kommonitor
+    # environment:
+    #   - LOGGING_LEVEL_ROOT=DEBUG
     env_file:
       - ../../config/importer.env
       - ../../config/keycloak.env

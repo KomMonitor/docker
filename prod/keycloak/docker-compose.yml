@@ -17,14 +17,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - ./database/data:/var/lib/postgresql/data
+    # volumes:
+    #   - ./database/data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak-data
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: kommonitor/keycloak:26.3.1-postgres
+    image: kommonitor/keycloak:26.3.4-postgres
     container_name: keycloak
     restart: unless-stopped
     volumes:

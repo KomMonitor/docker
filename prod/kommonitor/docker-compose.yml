@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:4.2.0'
+    image: 'kommonitor/web-client:4.2.1'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -70,7 +70,7 @@ services:
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
 
   kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.1.0'
+    image: 'kommonitor/processing-scheduler:2.1.1'
     container_name: kommonitor-processing-scheduler
     restart: unless-stopped
     networks:
@@ -86,7 +86,7 @@ services:
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
 
   kommonitor-importer:
-    image: kommonitor/importer:4.1.0
+    image: kommonitor/importer:4.1.1
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
