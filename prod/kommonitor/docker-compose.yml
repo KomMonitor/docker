@@ -52,7 +52,7 @@ services:
       - kommonitor
 
   kommonitor-processing-engine:
-    image: 'kommonitor/processing-engine:3.0.0'
+    image: 'kommonitor/processing-engine:3.0.1'
     container_name: kommonitor-processing-engine
     restart: unless-stopped
     ports:
@@ -86,7 +86,7 @@ services:
       - NODE_EXTRA_CA_CERTS=/etc/ssl/certs/kommonitor-cert.pem
 
   kommonitor-importer:
-    image: kommonitor/importer:4.1.1
+    image: kommonitor/importer:4.1.2
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
@@ -95,7 +95,7 @@ services:
       - 8087:8087
     volumes:
       - ./storage/importer:/tmp/kommonitor
-      - ../certs/cert.pem:/certificates/ca_cert.pem
+      - ../certs/cert.pem:/certificates/ca_cert.crt
     environment:
       - USE_SYSTEM_CA_CERTS=1
       - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_IMPORTER_BASEPATH}/v3/api-docs/swagger-config
@@ -123,7 +123,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:5.1.1
+    image: kommonitor/data-management:5.1.3
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
@@ -136,7 +136,7 @@ services:
     links:
       - kommonitor-db
     volumes:
-      - ../certs/cert.pem:/certificates/ca_cert.pem
+      - ../certs/cert.pem:/certificates/ca_cert.crt
     # Only use this for dev setup
     # extra_hosts:
     # - "kommonitor:192.168.178.20"
