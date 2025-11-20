@@ -80,7 +80,7 @@ running Keycloak without a proxy, so we have created some extra compose and env 
 
 To read more about running Keycloak with a reverse proxy, have a look at the [official Keycloak documentation](https://www.keycloak.org/server/reverseproxy)
 
-### Network Resoultion
+### Network Resolution
 The provided configuration expects that Keycloak is available in your network (internet/intranet)
 as well as from all other containers under the same URL. Communication via Docker internal DNS
 between the Keycloak Docker container and all other containers does not work, since the host name
