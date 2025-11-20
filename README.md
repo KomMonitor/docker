@@ -70,7 +70,7 @@ which forwards certain subpath requests to the correct port under which the KomM
 The [./prod](./prod) directory aims to provide configuration files that are easy to adopt for a production deployment.
 Although most configurations are ready-to-use, some manual actions are still required.
 
-## Proxied Keycloak
+### Proxied Keycloak
 We also provide some templates to use Keycloak with a proxy. Some configuration parameters slightly differ from 
 running Keycloak without a proxy, so we have created some extra compose and env files inside the 
 [./dev-proxy](./dev-proxy) and [./prod](./prod) directories, which must be referenced in the startup commands. 
@@ -79,6 +79,14 @@ running Keycloak without a proxy, so we have created some extra compose and env 
 - NGINX: `docker compose -f .\docker-compose.keycloak.yml up`
 
 To read more about running Keycloak with a reverse proxy, have a look at the [official Keycloak documentation](https://www.keycloak.org/server/reverseproxy)
+
+### Network Resoultion
+The provided configuration expects that Keycloak is available in your network (internet/intranet)
+as well as from all other containers under the same URL. Communication via Docker internal DNS
+between the Keycloak Docker container and all other containers does not work, since the host name
+would differ from the host name when calling Keycloak from internet/intranet. So, you have to make
+sure, that all containers can access Keycloak via the URL that is configured for the Keycloak
+`KC_HOSTNAME` parameter. This may produce problems if network resolution on the application servers differs from network resolution in internet/intranet. In those cases the [Docker extra_hosts](https://docs.docker.com/reference/compose-file/services/#extra_hosts) may help.
 
 ### SSL/TLS
 Keycloak and KomMonitor have to be configured to support SSL/TLS in order to expose service endpoints via HTTPS. While 
