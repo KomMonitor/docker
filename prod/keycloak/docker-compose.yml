@@ -17,8 +17,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # volumes:
-    #   - ./database/data:/var/lib/postgresql/data
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: keycloak-data
       POSTGRES_USER: keycloak
