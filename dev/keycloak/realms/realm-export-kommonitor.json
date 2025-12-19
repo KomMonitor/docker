@@ -143,7 +143,6 @@
       }
     ],
     "client": {
-      "kommonitor-data-management": [],
       "realm-management": [
         {
           "id": "5356eaf0-6e0d-480e-9a6d-84c21556060d",
@@ -357,10 +356,8 @@
         }
       ],
       "kommonitor-importer": [],
-      "kommonitor-web-client": [],
       "security-admin-console": [],
       "kommonitor-processing-scheduler": [],
-      "admin-cli": [],
       "account-console": [],
       "broker": [
         {
@@ -374,6 +371,10 @@
         }
       ],
       "kommonitor-processing-engine": [],
+      "kommonitor-client-config": [],
+      "kommonitor-data-management": [],
+      "kommonitor-web-client": [],
+      "admin-cli": [],
       "account": [
         {
           "id": "872dd212-6591-49e9-a595-feeab25c6a69",
@@ -462,7 +463,7 @@
           "attributes": {}
         }
       ],
-      "kommonitor-client-config": []
+      "kommonitor-processes-api": []
     }
   },
   "groups": [],
@@ -578,6 +579,24 @@
       "serviceAccountClientId": "kommonitor-importer",
       "disableableCredentialTypes": [],
       "requiredActions": [],
+      "realmRoles": [
+        "default-roles-kommonitor"
+      ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "6c2b8545-92cb-486e-8e8a-25c4927f630e",
+      "username": "service-account-kommonitor-processes-api",
+      "emailVerified": false,
+      "enabled": true,
+      "createdTimestamp": 1766129658088,
+      "totp": false,
+      "serviceAccountClientId": "kommonitor-processes-api",
+      "disableableCredentialTypes": [],
+      "requiredActions": [
+        "TERMS_AND_CONDITIONS"
+      ],
       "realmRoles": [
         "default-roles-kommonitor"
       ],
@@ -1191,6 +1210,64 @@
       ]
     },
     {
+      "id": "9c80a3f1-6170-4561-90c0-6c2e51208a70",
+      "clientId": "kommonitor-processes-api",
+      "name": "KomMonitor Processes API",
+      "description": "",
+      "rootUrl": "http://localhost:8099",
+      "adminUrl": "http://localhost:8099",
+      "baseUrl": "http://localhost:8099",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "processes-api-secret",
+      "redirectUris": [
+        "http://localhost:8099/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8099"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1766129658",
+        "backchannel.logout.session.required": "true",
+        "standard.token.exchange.enabled": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "service_account",
+        "acr",
+        "profile",
+        "roles",
+        "groups",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "c6f2de78-0a50-4b1f-9f71-d7c24a416742",
       "clientId": "kommonitor-processing-engine",
       "rootUrl": "http://localhost:8086/processing",
@@ -1521,6 +1598,7 @@
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
@@ -1542,7 +1620,256 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": false,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "client.resource.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "Client",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "view"
+              },
+              {
+                "name": "map-roles-client-scope"
+              },
+              {
+                "name": "configure"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "manage"
+              },
+              {
+                "name": "map-roles-composite"
+              },
+              {
+                "name": "token-exchange"
+              }
+            ]
+          },
+          {
+            "name": "Users",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "user-impersonated"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "view"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "manage"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "data-management-token-exchange",
+            "type": "client",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "clients": "[\"kommonitor-processes-api\"]"
+            }
+          },
+          {
+            "name": "kommonitor-processor-impersonator",
+            "type": "client",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "clients": "[\"kommonitor-processes-api\"]"
+            }
+          },
+          {
+            "name": "manage.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"manage\"]"
+            }
+          },
+          {
+            "name": "configure.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"configure\"]"
+            }
+          },
+          {
+            "name": "view.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"view\"]"
+            }
+          },
+          {
+            "name": "map-roles.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"map-roles\"]"
+            }
+          },
+          {
+            "name": "map-roles-client-scope.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"map-roles-client-scope\"]"
+            }
+          },
+          {
+            "name": "map-roles-composite.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"map-roles-composite\"]"
+            }
+          },
+          {
+            "name": "token-exchange.permission.client.0b55d690-805e-4922-b0d3-1e079b63851d",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"client.resource.0b55d690-805e-4922-b0d3-1e079b63851d\"]",
+              "scopes": "[\"token-exchange\"]",
+              "applyPolicies": "[\"data-management-token-exchange\"]"
+            }
+          },
+          {
+            "name": "manage.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"manage\"]"
+            }
+          },
+          {
+            "name": "view.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"view\"]"
+            }
+          },
+          {
+            "name": "map-roles.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"map-roles\"]"
+            }
+          },
+          {
+            "name": "manage-group-membership.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"manage-group-membership\"]"
+            }
+          },
+          {
+            "name": "admin-impersonating.permission.users",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"impersonate\"]",
+              "applyPolicies": "[\"kommonitor-processor-impersonator\"]"
+            }
+          },
+          {
+            "name": "user-impersonated.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"user-impersonated\"]"
+            }
+          }
+        ],
+        "scopes": [
+          {
+            "name": "manage"
+          },
+          {
+            "name": "view"
+          },
+          {
+            "name": "map-roles"
+          },
+          {
+            "name": "map-roles-client-scope"
+          },
+          {
+            "name": "map-roles-composite"
+          },
+          {
+            "name": "configure"
+          },
+          {
+            "name": "token-exchange"
+          },
+          {
+            "name": "impersonate"
+          },
+          {
+            "name": "user-impersonated"
+          },
+          {
+            "name": "manage-group-membership"
+          }
+        ],
+        "decisionStrategy": "UNANIMOUS"
+      }
     },
     {
       "id": "97d804ca-1011-47ee-acd4-4c97b5ffd839",
@@ -2383,14 +2710,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
             "oidc-address-mapper",
-            "saml-user-attribute-mapper",
+            "oidc-full-name-mapper",
             "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper",
+            "saml-user-attribute-mapper",
             "saml-user-property-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper"
           ]
         }
       },
@@ -2414,14 +2741,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
+            "saml-user-attribute-mapper",
             "saml-user-property-mapper",
             "oidc-full-name-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-role-list-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-address-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -3197,7 +3524,7 @@
     "clientSessionMaxLifespan": "0",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.3.1",
+  "keycloakVersion": "26.3.4",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
