@@ -13,11 +13,11 @@ services:
     networks:
       - kommonitor
     volumes:
-      - ./config/default-config.yml:/app/processor/default-config.yml
+      - ../../config/processes-api/default-config.yml:/app/processor/default-config.yml
       - ./storage/prefect:/root/.prefect
       - ./storage/results:/app/results
     env_file:
-      - ./processes-api.env
+      - ../../config/processes-api.env
     environment:
       PREFECT_API_URL: http://prefect-server:4200/api
       PROCESS_RESULTS_DIR: /app/results
@@ -44,7 +44,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
   prefect-server:
-    image: prefecthq/prefect:3.6.6-python3.13
+    image: prefecthq/prefect:3.6.7-python3.13
     container_name: prefect-server
     restart: unless-stopped
     networks:
@@ -81,7 +81,7 @@ services:
       PROCESS_RESULTS_DIR: /app/results
       PYTHONPATH: ${PYTHONPATH}:/app
     env_file:
-      - ./processes-api.env
+      - ../../config/processes-api.env
     depends_on:
        prefect-server:
         condition: service_healthy

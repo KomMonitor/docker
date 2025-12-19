@@ -2,13 +2,14 @@ server:
   bind:
     host: 0.0.0.0
     port: 8099
-  url: http://localhost:8099
+  # url: http://localhost:8099
+  url: ${PROCESSES_API_URL}
   mimetype: application/json; charset=UTF-8
   encoding: utf-8
   gzip: false
   languages:
     # First language is the default language
-    - en-US
+    - en
   # cors: true
   pretty_print: true
   limit: 10
