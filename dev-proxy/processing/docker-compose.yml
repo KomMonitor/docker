@@ -1,0 +1,91 @@
+version: '3'
+
+networks:
+  kommonitor:
+    name: kommonitor
+    driver: bridge
+
+services:
+  kommonitor-processes-api:
+    image: kommonitor/processes-api:1.0.0-SNAPSHOT
+    container_name: kommonitor-processes-api
+    restart: unless-stopped
+    networks:
+      - kommonitor
+    volumes:
+      - ../../config/processes-api/default-config.yml:/app/processor/default-config.yml
+      - ./storage/prefect:/root/.prefect
+      - ./storage/results:/app/results
+    env_file:
+      - ../../config/processes-api.env
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+      PROCESS_RESULTS_DIR: /app/results
+      PYTHONPATH: ${PYTHONPATH}:/app
+    ports:
+     - 8000:8000
+     - 8099:8099
+     - 8095:8095
+  prefect-db:
+    image: postgres:15
+    container_name: prefect-db
+    restart: unless-stopped
+    volumes:
+      - ./storage/db:/var/lib/postgresql/data
+    networks:
+      - kommonitor
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+  prefect-server:
+    image: prefecthq/prefect:3.6.7-python3.13
+    container_name: prefect-server
+    restart: unless-stopped
+    networks:
+      - kommonitor
+    command: prefect server start
+    volumes:
+      - ./storage/prefect:/root/.prefect
+    ports:
+      - "4200:4200"
+    depends_on:
+       prefect-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "'import urllib.request; import sys; response = urllib.request.urlopen(\"${PREFECT_API_URL}/health\"); sys.exit(0) if response.getcode() == 200 else sys.exit(1)'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      PREFECT_SERVER_API_HOST: 0.0.0.0
+      PREFECT_UI_SERVE_BASE: "/prefect"
+      PREFECT_SERVER_API_BASE_PATH: "/prefect/api"
+      PREFECT_API_URL: http://localhost/prefect/api
+      PREFECT_UI_API_URL: http://localhost/prefect/api
+      PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@prefect-db:5432/${DB_NAME}
+      PREFECT_SERVER_API_CSRF_PROTECTION_ENABLED: true
+  prefect-worker:
+    image: kommonitor/processes-api:1.0.0-SNAPSHOT
+    container_name: prefect-worker
+    restart: unless-stopped
+    networks:
+      - kommonitor
+    command: prefect worker start -p kommonitor-work-pool --type process
+    volumes:
+      - ./storage/prefect:/root/.prefect
+      - ./storage/results:/app/results
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+      PROCESS_RESULTS_DIR: /app/results
+      PYTHONPATH: ${PYTHONPATH}:/app
+    env_file:
+      - ../../config/processes-api.env
+    depends_on:
+       prefect-server:
+        condition: service_healthy

@@ -16,6 +16,9 @@ upstream data-management {
 upstream spatial-data-processor {
     server ${SPATIAL_DATA_PROCESSOR};
 }
+upstream processes-api {
+    server ${PROCESSES_API};
+}
 
 server {
     listen            ${NGINX_PORT};
@@ -44,10 +47,54 @@ server {
         location /kommonitor/api/processor/ {
             proxy_pass http://spatial-data-processor/;
         }
+        location /kommonitor/api/processes/ {
+            proxy_pass http://processes-api/;
+        }
     }
 
     location /kommonitor/ {
         proxy_pass http://client/;
+    }
+
+    location = /prefect/oauth2/auth {
+        proxy_pass http://oauth2-proxy:4180;
+        proxy_set_header Host $host;
+        proxy_set_header Content-Length "";
+        proxy_pass_request_body off;
+    }
+
+    location /prefect/oauth2/ {
+        proxy_pass http://oauth2-proxy:4180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+
+        proxy_buffer_size          128k;
+        proxy_buffers              4 256k;
+        proxy_busy_buffers_size    256k;
+    }
+
+    location /prefect {
+        rewrite ^/prefect$ /prefect/ permanent;
+    }
+
+    location /prefect/ {
+        auth_request /prefect/oauth2/auth;
+        error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
+
+        proxy_pass http://prefect-server:4200;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        proxy_buffer_size          128k;
+        proxy_buffers              4 256k;
+        proxy_busy_buffers_size    256k;
+        
+        # Required for Prefect WebSockets (Logs/Real-time updates)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
     }
 
 }
