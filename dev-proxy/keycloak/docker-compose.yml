@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
+      - ./storage/keycloak-db/data:/opt/keycloak/data/h2
     command:
       - --import-realm
       - --features=admin-fine-grained-authz:v1,scripts,token-exchange:v1

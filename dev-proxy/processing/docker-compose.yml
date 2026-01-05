@@ -19,7 +19,7 @@ services:
     env_file:
       - ../../config/processes-api.env
     environment:
-      PREFECT_API_URL: http://prefect-server:4200/api
+      PREFECT_API_URL: http://prefect-server:4200/prefect/api
       PROCESS_RESULTS_DIR: /app/results
       PYTHONPATH: ${PYTHONPATH}:/app
     ports:
@@ -81,7 +81,7 @@ services:
       - ./storage/prefect:/root/.prefect
       - ./storage/results:/app/results
     environment:
-      PREFECT_API_URL: http://prefect-server:4200/api
+      PREFECT_API_URL: http://prefect-server:4200/prefect/api
       PROCESS_RESULTS_DIR: /app/results
       PYTHONPATH: ${PYTHONPATH}:/app
     env_file:
