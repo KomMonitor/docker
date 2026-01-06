@@ -24,5 +24,6 @@ services:
       - IMPORTER=kommonitor-importer:8087
       - DATA_MANAGEMENT=kommonitor-data-management:8085
       - SPATIAL_DATA_PROCESSOR=kommonitor-spatial-data-processor:8090
+      - PROCESSES_API=kommonitor-processes-api:8099
     networks:
       - kommonitor
