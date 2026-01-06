@@ -35,6 +35,10 @@ server {
     proxy_set_header X-Forwarded-Host $host;
     proxy_set_header X-Forwarded-Proto $scheme;
 
+    proxy_buffer_size          128k;
+    proxy_buffers              4 256k;
+    proxy_busy_buffers_size    256k;
+
     location /kommonitor/api {
         location /kommonitor/api/importer/ {
             proxy_pass http://importer/;
@@ -58,6 +62,26 @@ server {
 
     location /kommonitor/ {
         proxy_pass http://client/;
+    }
+
+        location = /prefect/oauth2/auth {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header Content-Length "";
+        proxy_pass_request_body off;
+    }
+
+    location /prefect/oauth2/ {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+    }
+
+    location /prefect/ {
+        auth_request /prefect/oauth2/auth;
+        error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
+
+        proxy_pass http://prefect-server:4200;
     }
 
 }
