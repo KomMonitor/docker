@@ -248,6 +248,14 @@
           "attributes": {}
         },
         {
+          "id": "ed60af9d-b597-4bf5-bae3-0112b4dc66f4",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "ab58087d-9911-4a76-9d70-89a422e4f644",
+          "attributes": {}
+        },
+        {
           "id": "7f4a394b-f62f-4910-8865-4da4bc67fb87",
           "name": "view-users",
           "description": "${role_view-users}",
@@ -632,6 +640,29 @@
       "realmRoles": [
         "default-roles-kommonitor"
       ],
+      "notBefore": 0,
+      "groups": []
+    },
+    {
+      "id": "df1073de-746c-4765-b588-4fecd314d965",
+      "username": "service-account-realm-management",
+      "emailVerified": false,
+      "enabled": true,
+      "createdTimestamp": 1768295371700,
+      "totp": false,
+      "serviceAccountClientId": "realm-management",
+      "disableableCredentialTypes": [],
+      "requiredActions": [
+        "TERMS_AND_CONDITIONS"
+      ],
+      "realmRoles": [
+        "default-roles-kommonitor"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "uma_protection"
+        ]
+      },
       "notBefore": 0,
       "groups": []
     }
@@ -1244,6 +1275,7 @@
         "client.secret.creation.time": "1766129658",
         "backchannel.logout.session.required": "true",
         "standard.token.exchange.enabled": "false",
+        "post.logout.redirect.uris": "+",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
@@ -1592,12 +1624,12 @@
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
-      "bearerOnly": true,
+      "bearerOnly": false,
       "consentRequired": false,
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
       "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": false,
@@ -1611,6 +1643,7 @@
       "nodeReRegistrationTimeout": 0,
       "defaultClientScopes": [
         "web-origins",
+        "service_account",
         "profile",
         "roles",
         "email"
@@ -1665,10 +1698,10 @@
                 "name": "user-impersonated"
               },
               {
-                "name": "manage-group-membership"
+                "name": "view"
               },
               {
-                "name": "view"
+                "name": "manage-group-membership"
               },
               {
                 "name": "impersonate"
@@ -2710,13 +2743,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "oidc-full-name-mapper",
             "oidc-usermodel-attribute-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
             "saml-user-property-mapper",
+            "oidc-address-mapper",
             "oidc-sha256-pairwise-sub-mapper",
+            "oidc-full-name-mapper",
+            "saml-role-list-mapper",
             "oidc-usermodel-property-mapper"
           ]
         }
@@ -2741,11 +2774,11 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper",
             "oidc-address-mapper",
+            "saml-role-list-mapper",
+            "saml-user-property-mapper",
+            "saml-user-attribute-mapper",
             "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-attribute-mapper"
@@ -3524,7 +3557,7 @@
     "clientSessionMaxLifespan": "0",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.3.4",
+  "keycloakVersion": "26.4.7",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
