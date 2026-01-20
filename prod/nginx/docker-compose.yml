@@ -56,5 +56,6 @@ services:
       
       - OAUTH2_PROXY_SKIP_PROVIDER_BUTTON=true
       - OAUTH2_PROXY_LOGGING_LEVEL=debug
+      - OAUTH2_PROXY_SESSION_COOKIE_MINIMAL=true
     networks:
       - kommonitor
