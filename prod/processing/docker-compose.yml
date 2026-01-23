@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-processes-api:
-    image: kommonitor/processes-api:1.0.0-SNAPSHOT
+    image: kommonitor/processes-api:1.0.0
     container_name: kommonitor-processes-api
     restart: unless-stopped
     command: >
