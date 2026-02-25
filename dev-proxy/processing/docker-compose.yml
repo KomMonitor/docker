@@ -7,7 +7,7 @@ networks:
 
 services:
   kommonitor-processes-api:
-    image: kommonitor/processes-api:1.0.0
+    image: kommonitor/processes-api:1.0.1-SNAPSHOT
     container_name: kommonitor-processes-api
     restart: unless-stopped
     networks:
@@ -44,7 +44,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
   prefect-server:
-    image: prefecthq/prefect:3.6.7-python3.13
+    image: prefecthq/prefect:3.6.15-python3.13
     container_name: prefect-server
     restart: unless-stopped
     networks:
@@ -71,7 +71,7 @@ services:
       PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@prefect-db:5432/${DB_NAME}
       PREFECT_SERVER_API_CSRF_PROTECTION_ENABLED: true
   prefect-worker:
-    image: kommonitor/processes-api:1.0.0-SNAPSHOT
+    image: kommonitor/processes-api:1.0.1-SNAPSHOT
     container_name: prefect-worker
     restart: unless-stopped
     networks:
