@@ -5,7 +5,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:4.3.3'
+    image: 'kommonitor/web-client:5.0.0-SNAPSHOT'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -110,6 +110,7 @@ services:
       - kommonitor
     ports:
       - 5432:5432
+    # Note, when upgrading to PostgreSQL 18+, PGDATA changes
     volumes:
       - ./storage/database/datav5:/var/lib/postgresql/data
     healthcheck:
@@ -121,7 +122,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:5.1.5
+    image: kommonitor/data-management:5.1.6
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:
