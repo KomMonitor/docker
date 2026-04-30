@@ -47,33 +47,6 @@ services:
     networks:
       - kommonitor
 
-  kommonitor-processing-engine:
-    image: 'kommonitor/processing-engine:3.0.1'
-    container_name: kommonitor-processing-engine
-    restart: unless-stopped
-    ports:
-      - "8086:8086"
-    networks:
-      - kommonitor
-    volumes:
-      - ./storage/processing_engine:/code/tmp
-    depends_on:
-      - redis
-    env_file:
-      - ../../config/processing-engine.env
-
-  kommonitor-processing-scheduler:
-    image: 'kommonitor/processing-scheduler:2.1.1'
-    container_name: kommonitor-processing-scheduler
-    restart: unless-stopped
-    networks:
-      - kommonitor
-    depends_on:
-      - kommonitor-processing-engine
-      - kommonitor-data-management
-    env_file:
-      - ../../config/processing-scheduler.env
-
   kommonitor-importer:
     image: 'kommonitor/importer:4.2.0'
     container_name: kommonitor-importer
@@ -111,7 +84,7 @@ services:
       - ../../config/db.env
 
   kommonitor-data-management:
-    image: kommonitor/data-management:5.1.6
+    image: kommonitor/data-management:5.2.1
     container_name: kommonitor-data-management
     restart: unless-stopped
     depends_on:

@@ -7,19 +7,20 @@ networks:
 
 services:
   kommonitor-processes-api:
-    image: kommonitor/processes-api:1.0.1
+    image: kommonitor/processes-api:1.1.0-SNAPSHOT
     container_name: kommonitor-processes-api
     restart: unless-stopped
     networks:
       - kommonitor
     volumes:
       - ../../config/processes-api/default-config.yml:/app/processor/default-config.yml
-      - ./storage/prefect:/root/.prefect
-      - ./storage/results:/app/results
+      - ./storage/prefect/data:/root/.prefect
+      - ./storage/results/data:/app/results
     env_file:
       - ../../config/processes-api.env
     environment:
       PREFECT_API_URL: http://prefect-server:4200/prefect/api
+      PROCESSES_API_URL: http://localhost/kommonitor/api/processes
       PROCESS_RESULTS_DIR: /app/results
       PYTHONPATH: ${PYTHONPATH}:/app
     ports:
@@ -31,7 +32,7 @@ services:
     container_name: prefect-db
     restart: unless-stopped
     volumes:
-      - ./storage/db:/var/lib/postgresql/data
+      - ./storage/db/data:/var/lib/postgresql/data
     networks:
       - kommonitor
     healthcheck:
@@ -51,7 +52,7 @@ services:
       - kommonitor
     command: prefect server start
     volumes:
-      - ./storage/prefect:/root/.prefect
+      - ./storage/prefect/data:/root/.prefect
     ports:
       - "4200:4200"
     depends_on:
@@ -71,15 +72,15 @@ services:
       PREFECT_SERVER_DATABASE_CONNECTION_URL: postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@prefect-db:5432/${DB_NAME}
       PREFECT_SERVER_API_CSRF_PROTECTION_ENABLED: true
   prefect-worker:
-    image: kommonitor/processes-api:1.0.1
+    image: kommonitor/processes-api:1.1.0-SNAPSHOT
     container_name: prefect-worker
     restart: unless-stopped
     networks:
       - kommonitor
     command: prefect worker start -p kommonitor-work-pool --type process
     volumes:
-      - ./storage/prefect:/root/.prefect
-      - ./storage/results:/app/results
+      - ./storage/prefect/data:/root/.prefect
+      - ./storage/results/data:/app/results
     environment:
       PREFECT_API_URL: http://prefect-server:4200/prefect/api
       PROCESS_RESULTS_DIR: /app/results
