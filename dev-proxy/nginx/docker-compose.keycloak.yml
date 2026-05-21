@@ -16,7 +16,6 @@ services:
       - NGINX_PORT=80
       - CLIENT=kommonitor-client:80
       - CLIENT_CONFIG=kommonitor-client-config:8088
-      - PROCESSING_ENGINE=kommonitor-processing-engine:8086
       - IMPORTER=kommonitor-importer:8087
       - DATA_MANAGEMENT=kommonitor-data-management:8085
       - SPATIAL_DATA_PROCESSOR=kommonitor-spatial-data-processor:8090

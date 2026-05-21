@@ -4,9 +4,6 @@ upstream client {
 upstream client-config {
     server ${CLIENT_CONFIG};
 }
-upstream processing-engine {
-    server ${PROCESSING_ENGINE};
-}
 upstream importer {
     server ${IMPORTER};
 }
@@ -41,9 +38,6 @@ server {
         }
         location /kommonitor/api/client-config/ {
             proxy_pass http://client-config/;
-        }
-        location /kommonitor/api/processingengine/ {
-            proxy_pass http://processing-engine/;
         }
         location /kommonitor/api/datamanagement/ {
             proxy_pass http://data-management/;
