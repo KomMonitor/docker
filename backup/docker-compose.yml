@@ -1,0 +1,52 @@
+networks:
+  kommonitor:
+    name: kommonitor
+    driver: bridge
+
+services:
+  kommonitor-db-backup:
+    image: prodrigestivill/postgres-backup-local:15-alpine
+    container_name: kommonitor-db-backup
+    restart: unless-stopped
+    user: root:root
+    volumes:
+      - ./storage/kommonitor_backup:/backups
+    environment:
+      - POSTGRES_HOST=kommonitor-db
+      - POSTGRES_DB=kommonitor_data
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=kommonitor
+      - POSTGRES_PASSWORD=kommonitor
+      - POSTGRES_EXTRA_OPTS=-F c
+      - POSTGRES_DIST_COMP_OPTS=none
+      - BACKUP_SUFFIX=.backup
+      - SCHEDULE=@weekly
+      - BACKUP_ON_START=TRUE
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+    networks:
+      - kommonitor
+  keycloak-db-backup:
+    image: prodrigestivill/postgres-backup-local:15-alpine
+    container_name: keycloak-db-backup
+    restart: unless-stopped
+    user: root:root
+    volumes:
+      - ./storage/keycloak_backup:/backups
+    environment:
+      - POSTGRES_HOST=keycloak-db
+      - POSTGRES_DB=keycloak-data
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+      - POSTGRES_EXTRA_OPTS=-F c
+      - POSTGRES_DIST_COMP_OPTS=none
+      - BACKUP_SUFFIX=.backup
+      - SCHEDULE=@weekly
+      - BACKUP_ON_START=TRUE
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=8080
+    networks:
+      - kommonitor
