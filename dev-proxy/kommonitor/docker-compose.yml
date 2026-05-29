@@ -5,7 +5,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:5.1.1'
+    image: 'kommonitor/web-client:5.1.2'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -23,7 +23,7 @@ services:
     command: ["/bin/sh", "/code/config.sh"]
 
   kommonitor-client-config:
-    image: 'kommonitor/client-config:2.1.0'
+    image: 'kommonitor/client-config:2.2.1'
     container_name: kommonitor-client-config
     restart: unless-stopped
     ports:
