@@ -45,33 +45,18 @@ server {
         add_header Expires "0";
         
         location /kommonitor/api/importer/ {
-            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-            add_header Pragma "no-cache";
-            add_header Expires "0";
             proxy_pass http://importer/;
         }
         location /kommonitor/api/client-config/ {
-            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-            add_header Pragma "no-cache";
-            add_header Expires "0";
             proxy_pass http://client-config/;
         }
         location /kommonitor/api/datamanagement/ {
-            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-            add_header Pragma "no-cache";
-            add_header Expires "0";
             proxy_pass http://data-management/;
         }
         location /kommonitor/api/processor/ {
-            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-            add_header Pragma "no-cache";
-            add_header Expires "0";
             proxy_pass http://spatial-data-processor/;
         }
         location /kommonitor/api/processes/ {
-            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-            add_header Pragma "no-cache";
-            add_header Expires "0";
             proxy_pass http://processes-api/;
         }
     }

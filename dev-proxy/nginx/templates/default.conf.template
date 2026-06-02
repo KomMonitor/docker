@@ -56,6 +56,18 @@ server {
             proxy_pass http://client/;
         }
 
+    location /kommonitor/ {
+        auth_request /kommonitor/oauth2/auth;
+        error_page 401 = /kommonitor/oauth2/sign_in?rd=$scheme://$host$request_uri;
+        
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+
+        proxy_pass http://client/;
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+    }
+
     location = /kommonitor/oauth2/auth {
         proxy_pass http://oauth2-proxy-kommonitor:4181;
 
