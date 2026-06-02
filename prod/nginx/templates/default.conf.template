@@ -37,6 +37,9 @@ server {
     proxy_busy_buffers_size    256k;
 
     location /kommonitor/api {
+        auth_request /kommonitor/oauth2/auth;
+        error_page 401 = /kommonitor/oauth2/sign_in?rd=$scheme://$host$request_uri;
+        
         location /kommonitor/api/importer/ {
             proxy_pass http://importer/;
         }
@@ -55,10 +58,26 @@ server {
     }
 
     location /kommonitor/ {
+        auth_request /kommonitor/oauth2/auth;
+        error_page 401 = /kommonitor/oauth2/sign_in?rd=$scheme://$host$request_uri;
+
         proxy_pass http://client/;
     }
 
-        location = /prefect/oauth2/auth {
+    location = /kommonitor/oauth2/auth {
+        proxy_pass http://oauth2-proxy-kommonitor:4181;
+
+        proxy_set_header Content-Length "";
+        proxy_pass_request_body off;
+    }
+
+    location /kommonitor/oauth2/ {
+        proxy_pass http://oauth2-proxy-kommonitor:4181;
+
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+    }
+
+    location = /prefect/oauth2/auth {
         proxy_pass http://oauth2-proxy:4180;
 
         proxy_set_header Content-Length "";

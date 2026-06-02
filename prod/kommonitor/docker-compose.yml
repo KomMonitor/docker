@@ -23,7 +23,7 @@ services:
     command: ["/bin/sh", "/code/config.sh"]
   
   kommonitor-client-config:
-    image: 'kommonitor/client-config:2.1.1'
+    image: 'kommonitor/client-config:2.2.1'
     container_name: kommonitor-client-config
     restart: unless-stopped
     ports:
