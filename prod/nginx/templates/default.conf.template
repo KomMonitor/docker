@@ -40,19 +40,38 @@ server {
         auth_request /kommonitor/oauth2/auth;
         error_page 401 = /kommonitor/oauth2/sign_in?rd=$scheme://$host$request_uri;
         
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
+        
         location /kommonitor/api/importer/ {
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
             proxy_pass http://importer/;
         }
         location /kommonitor/api/client-config/ {
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
             proxy_pass http://client-config/;
         }
         location /kommonitor/api/datamanagement/ {
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
             proxy_pass http://data-management/;
         }
         location /kommonitor/api/processor/ {
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
             proxy_pass http://spatial-data-processor/;
         }
         location /kommonitor/api/processes/ {
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
             proxy_pass http://processes-api/;
         }
     }
@@ -60,15 +79,22 @@ server {
     location /kommonitor/ {
         auth_request /kommonitor/oauth2/auth;
         error_page 401 = /kommonitor/oauth2/sign_in?rd=$scheme://$host$request_uri;
+        
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
 
         proxy_pass http://client/;
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
     }
 
     location = /kommonitor/oauth2/auth {
         proxy_pass http://oauth2-proxy-kommonitor:4181;
 
-        proxy_set_header Content-Length "";
         proxy_pass_request_body off;
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
     }
 
     location /kommonitor/oauth2/ {
@@ -93,6 +119,10 @@ server {
     location /prefect/ {
         auth_request /prefect/oauth2/auth;
         error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
+        
+        add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+        add_header Pragma "no-cache";
+        add_header Expires "0";
 
         proxy_pass http://prefect-server:4200;
     }

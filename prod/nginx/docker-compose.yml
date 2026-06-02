@@ -24,6 +24,14 @@ services:
       - PROCESSES_API=kommonitor-processes-api:8099
     networks:
       - kommonitor
+  redis:
+    image: redis:7-alpine
+    container_name: oauth2-redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    networks:
+      - kommonitor
   oauth2-proxy:
     image: quay.io/oauth2-proxy/oauth2-proxy:v7.13.0
     container_name: oauth2-proxy
@@ -38,7 +46,13 @@ services:
       - OAUTH2_PROXY_CLIENT_ID=prefect-ui
       - OAUTH2_PROXY_CLIENT_SECRET=${KEYCLOAK_PREFECT_UI_SECRET}
       - OAUTH2_PROXY_COOKIE_SECRET=${OAUTH2_COOKIE_SECRET}
-      - OAUTH2_PROXY_COOKIE_SECURE=false
+      - OAUTH2_PROXY_COOKIE_SECURE=true
+      - OAUTH2_PROXY_COOKIE_HTTPONLY=true
+      - OAUTH2_PROXY_COOKIE_SAMESITE=lax
+
+      - OAUTH2_PROXY_PROMPT=login
+      - OAUTH2_PROXY_COOKIE_EXPIRE=1m
+      - OAUTH2_PROXY_COOKIE_REFRESH=30s
 
       - OAUTH2_PROXY_REDIRECT_URL=https://${KOMMONITOR_HOST_NAME}/prefect/oauth2/callback
       - OAUTH2_PROXY_PROXY_PREFIX=/prefect/oauth2
@@ -53,7 +67,20 @@ services:
       
       - OAUTH2_PROXY_SKIP_PROVIDER_BUTTON=true
       - OAUTH2_PROXY_LOGGING_LEVEL=debug
-      - OAUTH2_PROXY_SESSION_COOKIE_MINIMAL=true
+      
+      - OAUTH2_PROXY_LOGOUT_PATH=/prefect/oauth2/sign_out
+      - OAUTH2_PROXY_LOGOUT_URL=${KEYCLOAK_URL}/realms/kommonitor/protocol/openid-connect/logout
+      - OAUTH2_PROXY_POST_LOGOUT_REDIRECT_URL=https://${KOMMONITOR_HOST_NAME}/
+      
+      - OAUTH2_PROXY_SESSION_STORE_TYPE=redis
+      - OAUTH2_PROXY_REDIS_CONNECTION_URL=redis://oauth2-redis:6379
+      - OAUTH2_PROXY_SESSION_TIMEOUT=3600
+      - OAUTH2_PROXY_SESSION_COOKIE_NAME=_oauth2_proxy_prefect
+      - OAUTH2_PROXY_SESSION_COOKIE_REFRESH=true
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_SET_XAUTHREQUEST=true
+      - OAUTH2_PROXY_SESSION_COOKIE_HTTPONLY=true
+      - OAUTH2_PROXY_SESSION_COOKIE_SAMESITE=lax
     networks:
       - kommonitor
   oauth2-proxy-kommonitor:
@@ -70,8 +97,13 @@ services:
       - OAUTH2_PROXY_CLIENT_ID=prefect-ui
       - OAUTH2_PROXY_CLIENT_SECRET=${KEYCLOAK_PREFECT_UI_SECRET}
       - OAUTH2_PROXY_COOKIE_SECRET=${OAUTH2_COOKIE_SECRET}
-      - OAUTH2_PROXY_COOKIE_SECURE=false
-      - OAUTH2_PROXY_COOKIE_EXPIRE=0
+      - OAUTH2_PROXY_COOKIE_SECURE=true
+      - OAUTH2_PROXY_COOKIE_HTTPONLY=true
+      - OAUTH2_PROXY_COOKIE_SAMESITE=lax
+      
+      - OAUTH2_PROXY_PROMPT=login
+      - OAUTH2_PROXY_COOKIE_EXPIRE=1m
+      - OAUTH2_PROXY_COOKIE_REFRESH=30s
 
       - OAUTH2_PROXY_REDIRECT_URL=https://${KOMMONITOR_HOST_NAME}/kommonitor/oauth2/callback
       - OAUTH2_PROXY_PROXY_PREFIX=/kommonitor/oauth2
@@ -86,7 +118,20 @@ services:
       
       - OAUTH2_PROXY_SKIP_PROVIDER_BUTTON=true
       - OAUTH2_PROXY_LOGGING_LEVEL=debug
-      - OAUTH2_PROXY_SESSION_COOKIE_MINIMAL=true
+      
+      - OAUTH2_PROXY_LOGOUT_PATH=/kommonitor/oauth2/sign_out
+      - OAUTH2_PROXY_LOGOUT_URL=${KEYCLOAK_URL}/realms/kommonitor/protocol/openid-connect/logout
+      - OAUTH2_PROXY_POST_LOGOUT_REDIRECT_URL=https://${KOMMONITOR_HOST_NAME}/
+      
+      - OAUTH2_PROXY_SESSION_STORE_TYPE=redis
+      - OAUTH2_PROXY_REDIS_CONNECTION_URL=redis://oauth2-redis:6379
+      - OAUTH2_PROXY_SESSION_TIMEOUT=3600
+      - OAUTH2_PROXY_SESSION_COOKIE_NAME=_oauth2_proxy_kommonitor
+      - OAUTH2_PROXY_SESSION_COOKIE_REFRESH=true
+      - OAUTH2_PROXY_REVERSE_PROXY=true
+      - OAUTH2_PROXY_SET_XAUTHREQUEST=true
+      - OAUTH2_PROXY_SESSION_COOKIE_HTTPONLY=true
+      - OAUTH2_PROXY_SESSION_COOKIE_SAMESITE=lax
 
     networks:
       - kommonitor
