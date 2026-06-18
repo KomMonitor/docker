@@ -64,6 +64,9 @@ try {
   // 'regionalMeanOrNone' --> never show arithmetic mean. show regional mean if available or nothing
   window.__env.configMeanDataDisplay = 'preferRegionalMeanIfAvailable';
 
+  // if false, only users with admin role can see filter config section; if true, users with geodata edit roles can also see filter config section
+  window.__env.showFilterConfigForGeodataEditRoleNames = false; 
+
   // encrypted data transfer from Data Management API settings
   window.__env.encryption = {
     enabled: false,
