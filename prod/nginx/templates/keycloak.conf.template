@@ -13,6 +13,9 @@ upstream data-management {
 upstream spatial-data-processor {
     server ${SPATIAL_DATA_PROCESSOR};
 }
+upstream processes-api {
+    server ${PROCESSES_API};
+}
 upstream keycloak {
     server ${KEYCLOAK};
 }
@@ -49,6 +52,10 @@ server {
         location /kommonitor/api/processor/ {
             proxy_pass http://spatial-data-processor/;
         }
+        location /kommonitor/api/processes/ {
+            proxy_pass http://processes-api/;
+        }
+        
     }
 
     location /kommonitor/ {
