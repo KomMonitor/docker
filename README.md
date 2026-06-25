@@ -62,7 +62,20 @@ This sets up all components of the KomMonitor stack via Docker.
 **Proxy setup:** For the proxy setup the Web Client will be available via http://localhost/kommonitor after you have
 deployed NGINX.
 
-#### 3. Start NGINX proxy
+#### 3. Start Processing
+To use the Prefect-based processing capabilities, run `docker compose up` from [./dev/processing](./dev/processing)
+or [./dev-proxy/processing](./dev-proxy/processing).
+
+**Non-proxy setup:** The Prefect UI is directly available at http://localhost:4200.
+
+**Proxy setup:** The Prefect UI is available at http://localhost/prefect/ after NGINX is running. To additionally
+protect it with Keycloak authentication (requires the `kommonitor-creator` role), start NGINX with the OAuth2 Proxy
+variant:
+```sh
+docker compose -f ./docker-compose.oauth2-proxy.yml up
+```
+
+#### 4. Start NGINX proxy
 To start the NGINX proxy run `docker compose up` from [./dev-proxy/nginx](./dev-proxy/nginx). This sets up an NGINX, 
 which forwards certain subpath requests to the correct port under which the KomMonitor componets can be reached.
 
@@ -147,6 +160,10 @@ your current host, database and Keycloak configuration.
 Run `docker compose up` from [./prod/kommonitor](./prod/kommonitor). This sets up all components of the KomMonitor stack
 via Docker.
 
+### Start Processing
+Run `docker compose up` from [./prod/processing](./prod/processing) to start the Prefect-based processing stack.
+The Prefect UI will be available at `https://<host>/prefect/` once NGINX is running.
+
 ### Start NGINX
 Start the NGINX proxy by running `docker compose up` from [./prod/nginx](./prod/nginx). This sets up an NGINX, 
 which forwards certain subpath requests to the correct port under which the KomMonitor componets can be reached.
@@ -154,6 +171,20 @@ which forwards certain subpath requests to the correct port under which the KomM
 If you wish to change the subpaths, adapt the [NGINX configuration template](./prod/nginx/templates/default.conf.template).
 But don't forget to also adapt the same paths within [./prod/kommonitor/.env](./prod/kommonitor/.env).
 
+To additionally protect the Prefect UI with Keycloak authentication (requires the `kommonitor-creator` role), start
+NGINX with the OAuth2 Proxy variant instead:
+```sh
+docker compose -f ./docker-compose.oauth2-proxy.yml up
+```
+
 ### Start Portainer
 If you wish to monitor all your Docker containers via [Portainer](https://www.portainer.io/) start an instance from the
 [./prod/portainer](./prod/portainer) directory via `docker compose up`.
+
+### Start Backup
+The [./backup](./backup) directory provides automated PostgreSQL backups for both the KomMonitor and Keycloak
+databases. Run `docker compose up -d` from [./backup](./backup) to start the backup service.
+
+Backups are stored weekly in `./backup/storage/` — four weekly copies and six monthly archives are retained. The
+backup service connects to both databases over the shared `kommonitor` Docker network, so it should be started after
+the Keycloak and KomMonitor stacks are running.
