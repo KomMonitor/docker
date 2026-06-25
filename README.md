@@ -41,6 +41,9 @@ you have to reproject them. In future version, we plan to support other CRS by s
 Both the [./dev](./dev) and [./dev-proxy](./dev-proxy) directory contain a ready-to use setup. You can deploy each
 of the components via its Docker Compose file. Just follow the steps below.
 
+All stacks (Keycloak, KomMonitor, Processing, NGINX) connect to the same Docker bridge network named `kommonitor`,
+which enables cross-stack service discovery by container name. Start them in the order listed below.
+
 #### 1. Start a Keycloak instance:
 You'll find a Docker Compose file with a simple Keycloak configuration within the [./dev/keycloak](./dev/keycloak)
 and [./dev-proxy/keycloak](./dev-proxy/keycloak) directory. For developing purposes, these Keycloak configuration
@@ -49,9 +52,9 @@ uses a H2 file database for persisting data. To start Keycloak just run `docker 
 
 Keycloak has a preconfigured "KomMonitor" realm with several KomMonitor clients preregistered.
 
-**Important:** To use Keycloak for development purposes on your local machine, add Keycloak as an entry to your host
-file as described [here](./dev/keycloak/addHostEntry.readme). Keycloak then will be available under
-http://keycloak:8080/.
+**Important:** To use Keycloak for development purposes on your local machine (both dev and dev-proxy setups), add
+Keycloak as an entry to your host file as described [here](./dev/keycloak/addHostEntry.readme). Keycloak then will
+be available under http://keycloak:8080/.
 
 #### 2. Start KomMonitor: 
 Run `docker compose up` from [./dev/kommonitor](./dev/kommonitor) or [./dev-proxy/kommonitor](./dev-proxy/kommonitor).
@@ -76,30 +79,52 @@ docker compose -f ./docker-compose.oauth2-proxy.yml up
 ```
 
 #### 4. Start NGINX proxy
-To start the NGINX proxy run `docker compose up` from [./dev-proxy/nginx](./dev-proxy/nginx). This sets up an NGINX, 
-which forwards certain subpath requests to the correct port under which the KomMonitor componets can be reached.
+To start the NGINX proxy run `docker compose up` from [./dev-proxy/nginx](./dev-proxy/nginx). This sets up an NGINX,
+which forwards requests to the following subpaths:
+
+| Path | Backend service |
+|---|---|
+| `/kommonitor/` | kommonitor-client |
+| `/kommonitor/api/client-config/` | kommonitor-client-config |
+| `/kommonitor/api/datamanagement/` | kommonitor-data-management |
+| `/kommonitor/api/importer/` | kommonitor-importer |
+| `/kommonitor/api/processor/` | kommonitor-spatial-data-processor |
+| `/kommonitor/api/processes/` | kommonitor-processes-api |
+| `/prefect/` | prefect-server |
+| `/keycloak/` | keycloak *(keycloak compose variant only)* |
+
+To protect the Prefect UI with Keycloak authentication (requires the `kommonitor-creator` role), use the OAuth2
+Proxy variant instead of the default compose file:
+```sh
+docker compose -f ./docker-compose.oauth2-proxy.yml up
+```
 
 ## Production Setup
 The [./prod](./prod) directory aims to provide configuration files that are easy to adopt for a production deployment.
 Although most configurations are ready-to-use, some manual actions are still required.
 
+All stacks connect to the same Docker bridge network named `kommonitor`. Start them in this order:
+Keycloak → KomMonitor → Processing (optional) → NGINX → Portainer (optional) → Backup (optional).
+
 ### Proxied Keycloak
 We also provide some templates to use Keycloak with a proxy. Some configuration parameters slightly differ from 
 running Keycloak without a proxy, so we have created some extra compose and env files inside the 
 [./dev-proxy](./dev-proxy) and [./prod](./prod) directories, which must be referenced in the startup commands. 
-- Keycloak: `docker compose -f .\docker-compose.proxy.yml up`
-- KomMonitor: `docker compose --env-file .\.env.keycloak-proxy up`
-- NGINX: `docker compose -f .\docker-compose.keycloak.yml up`
+- Keycloak: `docker compose -f ./docker-compose.proxy.yml up`
+- KomMonitor: `docker compose --env-file ./.env.keycloak-proxy up`
+- NGINX: `docker compose -f ./docker-compose.keycloak.yml up`
 
-To read more about running Keycloak with a reverse proxy, have a look at the [official Keycloak documentation](https://www.keycloak.org/server/reverseproxy)
+To read more about running Keycloak with a reverse proxy, have a look at the
+[official Keycloak documentation](https://www.keycloak.org/server/reverseproxy)
 
 ### Network Resolution
-The provided configuration expects that Keycloak is available in your network (internet/intranet)
-as well as from all other containers under the same URL. Communication via Docker internal DNS
-between the Keycloak Docker container and all other containers does not work, since the host name
-would differ from the host name when calling Keycloak from internet/intranet. So, you have to make
-sure, that all containers can access Keycloak via the URL that is configured for the Keycloak
-`KC_HOSTNAME` parameter. This may produce problems if network resolution on the application servers differs from network resolution in internet/intranet. In those cases the [Docker extra_hosts](https://docs.docker.com/reference/compose-file/services/#extra_hosts) may help.
+The provided configuration expects that Keycloak is available in your network (internet/intranet) as well as from all
+other containers under the same URL. Communication via Docker internal DNS between the Keycloak Docker container and all
+other containers does not work, since the host name would differ from the host name when calling Keycloak from 
+internet/intranet. So, you have to make sure, that all containers can access Keycloak via the URL that is configured for
+the Keycloak `KC_HOSTNAME` parameter. This may produce problems if network resolution on the application servers differs
+from network resolution in internet/intranet. In those cases the 
+[Docker extra_hosts](https://docs.docker.com/reference/compose-file/services/#extra_hosts) may help.
 
 ### SSL/TLS
 Keycloak and KomMonitor have to be configured to support SSL/TLS in order to expose service endpoints via HTTPS. While 
@@ -138,9 +163,9 @@ KomMonitor components registered as client.
 
 **4. Generate client secrets**  
 The "KomMonitor" realm created at startup time has client definitions, which have some placeholder values as secrets. For
-development purposes it is totally fine to leave the secrets as they are. However, for production setup you should. These
-secrets also have to be provided to the KomMonitor components by setting the appropriate variables within
-[./prod/kommonitor/.env](./prod/kommonitor/.env).
+development purposes it is totally fine to leave the secrets as they are. However, for a production setup you should 
+regenerate all client secrets and replace the placeholder values. These secrets also have to be provided to the 
+KomMonitor components by setting the appropriate variables within [./prod/kommonitor/.env](./prod/kommonitor/.env).
 
 **5. Create a user**  
 Within the "KomMonitor" realm create a first user for accessing restricted KomMonitor datasets and secrets. This user 
@@ -165,10 +190,22 @@ Run `docker compose up` from [./prod/processing](./prod/processing) to start the
 The Prefect UI will be available at `https://<host>/prefect/` once NGINX is running.
 
 ### Start NGINX
-Start the NGINX proxy by running `docker compose up` from [./prod/nginx](./prod/nginx). This sets up an NGINX, 
-which forwards certain subpath requests to the correct port under which the KomMonitor componets can be reached.
+Start the NGINX proxy by running `docker compose up` from [./prod/nginx](./prod/nginx). This sets up an NGINX,
+which forwards requests to the following subpaths:
 
-If you wish to change the subpaths, adapt the [NGINX configuration template](./prod/nginx/templates/default.conf.template).
+| Path | Backend service |
+|---|---|
+| `/kommonitor/` | kommonitor-client |
+| `/kommonitor/api/client-config/` | kommonitor-client-config |
+| `/kommonitor/api/datamanagement/` | kommonitor-data-management |
+| `/kommonitor/api/importer/` | kommonitor-importer |
+| `/kommonitor/api/processor/` | kommonitor-spatial-data-processor |
+| `/kommonitor/api/processes/` | kommonitor-processes-api |
+| `/prefect/` | prefect-server |
+| `/keycloak/` | keycloak *(keycloak compose variant only)* |
+
+If you wish to change the subpaths, adapt the 
+[NGINX configuration template](./prod/nginx/templates/default.conf.template).
 But don't forget to also adapt the same paths within [./prod/kommonitor/.env](./prod/kommonitor/.env).
 
 To additionally protect the Prefect UI with Keycloak authentication (requires the `kommonitor-creator` role), start
