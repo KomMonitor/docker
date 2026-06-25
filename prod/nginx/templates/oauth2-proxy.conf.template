@@ -61,7 +61,23 @@ server {
         proxy_pass http://client/;
     }
 
+        location = /prefect/oauth2/auth {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header Content-Length "";
+        proxy_pass_request_body off;
+    }
+
+    location /prefect/oauth2/ {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+    }
+
     location /prefect/ {
+        auth_request /prefect/oauth2/auth;
+        error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
+
         proxy_pass http://prefect-server;
     }
 

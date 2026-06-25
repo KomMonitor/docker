@@ -21,12 +21,8 @@ upstream prefect-server {
 }
 
 server {
-    listen            ${NGINX_PORT} ssl;
-    listen       [::]:${NGINX_PORT} ssl;
-    ssl_certificate /etc/ssl/cert.pem;
-    ssl_certificate_key /etc/ssl/key.pem;
-
-    client_max_body_size 1G;
+    listen            ${NGINX_PORT};
+    listen       [::]:${NGINX_PORT};
 
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -61,7 +57,23 @@ server {
         proxy_pass http://client/;
     }
 
+    location = /prefect/oauth2/auth {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header Content-Length "";
+        proxy_pass_request_body off;
+    }
+
+    location /prefect/oauth2/ {
+        proxy_pass http://oauth2-proxy:4180;
+
+        proxy_set_header X-Auth-Request-Redirect $request_uri;
+    }
+
     location /prefect/ {
+        auth_request /prefect/oauth2/auth;
+        error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
+
         proxy_pass http://prefect-server;
     }
 
