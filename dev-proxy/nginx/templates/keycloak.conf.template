@@ -14,30 +14,37 @@ server {
     location /kommonitor/api {
         location /kommonitor/api/importer/ {
             set $upstream_importer ${IMPORTER};
-            proxy_pass http://$upstream_importer/;
+            rewrite ^/kommonitor/api/importer/(.*) /$1 break;
+            proxy_pass http://$upstream_importer;
         }
         location /kommonitor/api/client-config/ {
             set $upstream_client_config ${CLIENT_CONFIG};
-            proxy_pass http://$upstream_client_config/;
+            rewrite ^/kommonitor/api/client-config/(.*) /$1 break;
+            proxy_pass http://$upstream_client_config;
         }
         location /kommonitor/api/datamanagement/ {
             set $upstream_data_management ${DATA_MANAGEMENT};
-            proxy_pass http://$upstream_data_management/;
+            rewrite ^/kommonitor/api/datamanagement/(.*) /$1 break;
+            proxy_pass http://$upstream_data_management;
         }
         location /kommonitor/api/processor/ {
             set $upstream_spatial_data_processor ${SPATIAL_DATA_PROCESSOR};
-            proxy_pass http://$upstream_spatial_data_processor/;
+            rewrite ^/kommonitor/api/processor/(.*) /$1 break;
+            proxy_pass http://$upstream_spatial_data_processor;
         }
     }
 
     location /kommonitor/ {
         set $upstream_client ${CLIENT};
-        proxy_pass http://$upstream_client/;
+        rewrite ^/kommonitor/(.*) /$1 break;
+        proxy_pass http://$upstream_client;
     }
 
     location /keycloak/ {
         set $upstream_keycloak ${KEYCLOAK};
-        proxy_pass http://$upstream_keycloak/;
+        rewrite ^/keycloak/([^.?]*[^/])/console$ /keycloak/$1/console/ redirect;
+        rewrite ^/keycloak/(.*) /$1 break;
+        proxy_pass http://$upstream_keycloak;
     }
 
 }
