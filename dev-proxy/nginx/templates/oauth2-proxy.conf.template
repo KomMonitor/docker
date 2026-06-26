@@ -1,24 +1,4 @@
-upstream client {
-    server ${CLIENT};
-}
-upstream client-config {
-    server ${CLIENT_CONFIG};
-}
-upstream importer {
-    server ${IMPORTER};
-}
-upstream data-management {
-    server ${DATA_MANAGEMENT};
-}
-upstream spatial-data-processor {
-    server ${SPATIAL_DATA_PROCESSOR};
-}
-upstream processes-api {
-    server ${PROCESSES_API};
-}
-upstream prefect-server {
-    server ${PREFECT_SERVER};
-}
+resolver 127.0.0.11 valid=30s ipv6=off;
 
 server {
     listen            ${NGINX_PORT};
@@ -37,24 +17,30 @@ server {
 
     location /kommonitor/api {
         location /kommonitor/api/importer/ {
-            proxy_pass http://importer/;
+            set $upstream_importer ${IMPORTER};
+            proxy_pass http://$upstream_importer/;
         }
         location /kommonitor/api/client-config/ {
-            proxy_pass http://client-config/;
+            set $upstream_client_config ${CLIENT_CONFIG};
+            proxy_pass http://$upstream_client_config/;
         }
         location /kommonitor/api/datamanagement/ {
-            proxy_pass http://data-management/;
+            set $upstream_data_management ${DATA_MANAGEMENT};
+            proxy_pass http://$upstream_data_management/;
         }
         location /kommonitor/api/processor/ {
-            proxy_pass http://spatial-data-processor/;
+            set $upstream_spatial_data_processor ${SPATIAL_DATA_PROCESSOR};
+            proxy_pass http://$upstream_spatial_data_processor/;
         }
         location /kommonitor/api/processes/ {
-            proxy_pass http://processes-api/;
+            set $upstream_processes_api ${PROCESSES_API};
+            proxy_pass http://$upstream_processes_api/;
         }
     }
 
     location /kommonitor/ {
-        proxy_pass http://client/;
+        set $upstream_client ${CLIENT};
+        proxy_pass http://$upstream_client/;
     }
 
     location = /prefect/oauth2/auth {
@@ -74,7 +60,8 @@ server {
         auth_request /prefect/oauth2/auth;
         error_page 401 = /prefect/oauth2/sign_in?rd=$scheme://$host$request_uri;
 
-        proxy_pass http://prefect-server;
+        set $upstream_prefect ${PREFECT_SERVER};
+        proxy_pass http://$upstream_prefect;
     }
 
 }
