@@ -22,9 +22,28 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: kommonitor/keycloak:26.5.7-postgres
+    image: kommonitor/keycloak:26.6.4-postgres
     container_name: keycloak
     restart: unless-stopped
+    user: "1000:0"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /opt/keycloak/data 
+    cap_drop: [ ALL ]
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2g
+          pids: 2048
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/9000 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '\"status\": \"UP\"' <&3"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
     volumes:
       - ./realms/realm-export-kommonitor.json:/opt/keycloak/data/import/realm.json
       - ../certs:/opt/keycloak/demo/certs
