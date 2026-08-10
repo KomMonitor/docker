@@ -5,7 +5,7 @@ networks:
 
 services:
   kommonitor-client:
-    image: 'kommonitor/web-client:5.1.3'
+    image: 'kommonitor/web-client:5.1.5'
     container_name: kommonitor-client
     restart: unless-stopped
     volumes:
@@ -48,7 +48,7 @@ services:
       - kommonitor
 
   kommonitor-importer:
-    image: 'kommonitor/importer:4.2.1'
+    image: 'kommonitor/importer:4.2.3'
     container_name: kommonitor-importer
     restart: unless-stopped
     networks:
