@@ -25,6 +25,12 @@ services:
       - PREFECT_SERVER=prefect-server:4200
     networks:
       - kommonitor
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
   oauth2-proxy:
     image: quay.io/oauth2-proxy/oauth2-proxy:v7.13.0
     container_name: oauth2-proxy
@@ -57,3 +63,6 @@ services:
       - OAUTH2_PROXY_SESSION_COOKIE_MINIMAL=true
     networks:
       - kommonitor
+    depends_on:
+      oauth2-redis:
+        condition: service_healthy
