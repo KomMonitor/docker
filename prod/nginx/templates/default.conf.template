@@ -58,4 +58,9 @@ server {
         proxy_pass http://$upstream_prefect;
     }
 
+    location / {
+        set $upstream_client ${CLIENT};
+        proxy_pass http://$upstream_client;
+    }
+
 }

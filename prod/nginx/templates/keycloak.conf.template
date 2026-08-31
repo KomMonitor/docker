@@ -60,4 +60,9 @@ server {
         proxy_pass http://$upstream_keycloak;
     }
 
+    location / {
+        set $upstream_client ${CLIENT};
+        proxy_pass http://$upstream_client;
+    }
+
 }
