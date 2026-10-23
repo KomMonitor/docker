@@ -5,7 +5,7 @@ networks:
 
 services:
   kommonitor-proxy:
-    image: nginx:latest
+    image: nginx:1.31.8-alpine
     container_name: kommonitor-proxy
     restart: unless-stopped
     ports:
