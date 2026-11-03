@@ -1291,6 +1291,7 @@
         "roles",
         "groups",
         "basic",
+        "audience-scope",
         "email"
       ],
       "optionalClientScopes": [

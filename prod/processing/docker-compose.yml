@@ -49,7 +49,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
   prefect-server:
-    image: prefecthq/prefect:3.6.15-python3.13
+    image: prefecthq/prefect:3.9.1-python3.13
     container_name: prefect-server
     restart: unless-stopped
     networks:
