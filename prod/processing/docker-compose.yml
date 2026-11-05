@@ -32,7 +32,7 @@ services:
      - 8099:8099
      - 8095:8095
   prefect-db:
-    image: postgres:15
+    image: postgres:15.19
     container_name: prefect-db
     restart: unless-stopped
     volumes:

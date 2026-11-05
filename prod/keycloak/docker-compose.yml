@@ -5,7 +5,7 @@ networks:
 
 services:
   keycloak-db:
-    image: postgres:15
+    image: postgres:15.19
     container_name: keycloak-db
     restart: unless-stopped
     networks:
