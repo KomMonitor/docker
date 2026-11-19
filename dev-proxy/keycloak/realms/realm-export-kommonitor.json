@@ -1613,7 +1613,8 @@
         "groups",
         "basic",
         "email",
-        "audience-scope"
+        "audience-scope",
+        "kc-admin-api"
       ],
       "optionalClientScopes": [
         "address",

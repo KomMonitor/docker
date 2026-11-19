@@ -1685,7 +1685,8 @@
         "groups",
         "basic",
         "audience-scope",
-        "email"
+        "email",
+        "kc-admin-api"
       ],
       "optionalClientScopes": [
         "address",
