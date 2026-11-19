@@ -22,7 +22,7 @@ services:
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: keycloak
   keycloak:
-    image: kommonitor/keycloak:26.7.5-postgres
+    image: kommonitor/keycloak:26.8.2-3-postgres
     container_name: keycloak
     restart: unless-stopped
     user: "1000:0"
@@ -75,3 +75,4 @@ services:
       - KC_SPI_CONNECTIONS_JPA_LEGACY_MIGRATION_STRATEGY=update
       - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/demo/certs/cert.pem
       - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/demo/certs/key.pem
+      - KC_LOG_LEVEL=INFO
