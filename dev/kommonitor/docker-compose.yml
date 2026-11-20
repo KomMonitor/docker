@@ -64,6 +64,8 @@ services:
       - ./storage/importer:/tmp/kommonitor
     # environment:
     #   - LOGGING_LEVEL_ROOT=DEBUG
+    environment:
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
     env_file:
       - ../../config/importer.env
       - ../../config/keycloak.env
@@ -105,6 +107,7 @@ services:
       - KOMMONITOR_MIGRATION_VERSIONS=5.0.0
       - KOMMONITOR_MIGRATION_DELETE_LEGACY_ADMIN_ORGANIZATIONALUNIT=true
       - KOMMONITOR_MIGRATION_DELETE_LEGACY_PUBLIC_ORGANIZATIONALUNIT=true
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
     env_file:
       - ../../config/data-management.env
       - ../../config/keycloak.env
@@ -121,6 +124,8 @@ services:
       - ../../data/basis-dlm:/opt/kommonitor/data/basis-dlm
     env_file:
       - ../../config/spatial-data-processor.env
+    environment:
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
 
   # optional pgadmin container to inspect the database
   # pgadmin:

@@ -64,6 +64,7 @@ services:
       - USE_SYSTEM_CA_CERTS=1
       - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_IMPORTER_BASEPATH}/v3/api-docs/swagger-config
       - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_IMPORTER_BASEPATH}/v3/api-docs
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
     env_file:
       - ../../config/importer.env
       - ../../config/keycloak.env
@@ -113,6 +114,7 @@ services:
       - KOMMONITOR_MIGRATION_VERSIONS=5.0.0
       - KOMMONITOR_MIGRATION_DELETE_LEGACY_ADMIN_ORGANIZATIONALUNIT=true
       - KOMMONITOR_MIGRATION_DELETE_LEGACY_PUBLIC_ORGANIZATIONALUNIT=true
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
     env_file:
       - ../../config/data-management.env
       - ../../config/keycloak.env
@@ -132,6 +134,7 @@ services:
       - USE_SYSTEM_CA_CERTS=1
       - SPRINGDOC_SWAGGERUI_CONFIGURL=${KOMMONITOR_SPATIAL_DATA_PROCESSOR_BASEPATH}/v3/api-docs/swagger-config
       - SPRINGDOC_SWAGGERUI_URL=${KOMMONITOR_SPATIAL_DATA_PROCESSOR_BASEPATH}/v3/api-docs
+      - JAVA_TOOL_OPTIONS="-XX:-UseBASE64Intrinsics"
     env_file:
       - ../../config/spatial-data-processor.env
 
